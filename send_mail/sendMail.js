@@ -1,7 +1,7 @@
 const mailgun = require("mailgun-js");
 const fs = require('fs');
 const DOMAIN = 'sandboxd4a40f661f4147b08c1dbee345c0b581.mailgun.org';
-const api_key = '639b31af330cdeeb231aa262ca9125ae-6ae2ecad-1c64744e'
+const api_key = 'key-68872e8beec5c2daac3308e624b2e0d2'
 const mg = mailgun({apiKey:api_key, domain: DOMAIN});
 
 const data = fs.readFileSync('./mail_list.txt','utf8')
