@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>密碼產生器</title>
+  <style>
+    label {
+      font-size: 48px;
+    }
+
+    label>input {
+      zoom: 200%;
+    }
+
+    .btn-generate {
+      padding: 12px 24px;
+      font-size: 20px;
+      background-color: burlywood;
+    }
+
+    .result {
+      margin: 12px 0px;
+      font-size: 48px;
+      background-color: cornsilk;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div><label><input type="checkbox" name="en"
+          data-char="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ">英文</label></div>
+    <div><label><input type="checkbox" name="num" data-char="0123456789">數字</label></div>
+    <div><label><input type="checkbox" name="special" data-char="@#$%^&()_+">特殊符號</label></div>
+    <div>
+      <button class="btn-generate">產生</button>
+    </div>
+    <div class="result">
+      password
+    </div>
+  </div>
+  <script>
+    document.querySelector('.btn-generate').addEventListener('click', function (e) {
+      let availableChar = ''
+      const element = document.querySelectorAll('input[type=checkbox]')
+      element.forEach((el, index) => {
+        if (el.checked) {
+          availableChar += el.getAttribute('data-char')
+        }
+      })
+      let result = ''
+      for (let i = 0; i < 10; i++) {
+        const index = Math.floor(Math.random() * availableChar.length)
+        result += availableChar[index]
+      }
+      document.querySelector('.result').innerText = result
+    })
+  </script>
+</body>
+
+</html>
+
+<!-- 
+1.可以改成一開始沒有 password 的版面
+2. 都沒有選的時候按產生會印出 undefined
+
+ -->

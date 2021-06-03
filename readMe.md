@@ -17,3 +17,6 @@ HTML JS CSS 的綜合練習，主要是 JS 對 DOM 的操控以及對表單的�
 
 # todoList
 HTMl JS CSS 的綜合練習，做出外觀功能都不錯的 todo list。
+
+# password_generator
+產生隨機密碼給使用者，使用者可以勾選是否要包含數字還是英文還是特殊符號。
