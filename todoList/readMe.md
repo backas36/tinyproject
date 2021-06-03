@@ -7,4 +7,5 @@ DOM 操控如增加元素、刪除元素；監聽事件、事件代理；本地�
 JavaScript 語法熟悉。
 
 # 預計可加入的 feature
-可以對 todo 分類。
+- 可以對 todo 分類。
+- 可以對已新增的 todo list 做編輯功能。
