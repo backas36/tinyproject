@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.querySelector('.add-btn')
   const todos = getLocalTodoArr()
 
+
   todos.forEach((todo) => {
     makeTodoElement(todo)
   })

@@ -20,3 +20,6 @@ HTMl JS CSS 的綜合練習，做出外觀功能都不錯的 todo list。
 
 # password_generator
 產生隨機密碼給使用者，使用者可以勾選是否要包含數字還是英文還是特殊符號。
+
+# gameStream
+串接 Twitch API 來產生動態的網頁
