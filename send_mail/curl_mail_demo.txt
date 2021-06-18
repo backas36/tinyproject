@@ -1,6 +1,0 @@
-curl -s --user 'api:key-68872e8beec5c2daac3308e624b2e0d2' \
-	https://api.mailgun.net/v3/sandboxd4a40f661f4147b08c1dbee345c0b581.mailgun.org/messages \
-	-F from='Excited User <mailgun@sandboxd4a40f661f4147b08c1dbee345c0b581.mailgun.org>' \
-	-F to=backas36+ashi@gmail.com\
-	-F subject='Sent test email' \
-	-F text='Testing some Mailgun awesomeness!'
