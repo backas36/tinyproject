@@ -160,15 +160,15 @@
   <script>
     document.querySelector('.submit__btn').addEventListener('click', (e) => {
       let availableChar = ''
-      let resultPassword = ''
+      let resultText = ''
 
       const result = document.querySelector('.result__detail')
       const passwordSize = +document.querySelector('.option__select').value
 
       const checkboxes = Array.from(document.querySelectorAll('input'))
+      result.classList.remove('result-hide')
       if (checkboxes.every(checkbox => checkbox.checked === false)) {
-        result.classList.remove('result-hide')
-        result.textContent = '請選擇密碼產生條件'
+        resultText = '請選擇密碼產生條件'
       } else {
         checkboxes.forEach(checkbox => {
           if (checkbox.checked === true) {
@@ -179,12 +179,12 @@
 
         for (let i = 0; i < passwordSize; i++) {
           const charIndex = Math.floor(Math.random() * availableChar.length)
-          resultPassword += availableChar[charIndex]
+          resultText += availableChar[charIndex]
         }
 
-        result.textContent = resultPassword;
       }
 
+      result.textContent = resultText;
 
     })
   </script>
