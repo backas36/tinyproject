@@ -11,3 +11,6 @@ JavaScript 語法熟悉。
 - 可以對已新增的 todo list 做編輯功能。
 - 再簡化程式，例如可以把 addEventListener 弄成 function (參考 https://www.youtube.com/watch?v=XF1_MlZ5l6M&t=1s 16:00)
 - 新增 search bar 功能 (參考 https://www.youtube.com/watch?v=3NG8zy0ywIk&list=PL4cUxeGkcC9gfoKa5la9dsdCNpuey2s-V&index=16)
+
+## 參考資料
+> 此作品靈感來源為 Huli 第五期第七週作業
