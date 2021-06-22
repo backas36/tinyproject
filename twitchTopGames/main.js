@@ -39,6 +39,11 @@ navMenu.addEventListener('click', (event) => {
     renderStreamsCards(gameName)
   }
 })
+const getTopGames = (callback) => {
+  const endPoint = '/games/top?limit=5'
+  setRequest(endPoint, callback)
+}
+
 const setRequest = (endPoint, callback) => {
   const request = new XMLHttpRequest()
   const API_URL = 'https://api.twitch.tv/kraken'
@@ -71,10 +76,7 @@ const setRequest = (endPoint, callback) => {
   }
   request.send()
 }
-const getTopGames = (callback) => {
-  const endPoint = '/games/top?limit=5'
-  setRequest(endPoint, callback)
-}
+
 
 const getStreams = (gameName, callback) => {
   const endPoint = `/streams/?game=${encodeURIComponent(gameName)}&limit=20`
