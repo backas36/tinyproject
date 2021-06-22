@@ -1,5 +1,4 @@
 document.querySelector('form').addEventListener('submit', (event) => {
-  event.preventDefault()
   let hasEmpty = false
   const formResult = {}
 
@@ -44,11 +43,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
       makeFormResult(formResultKey, inputText.value)
     }
   }
-  if (!hasEmpty) {
-    let showFormResult = ''
-    for (const key in formResult) {
-      showFormResult += `${key} : ${formResult[key]} \n`
-    }
-    alert(showFormResult)
+  if (hasEmpty) {
+   event.preventDefault()
   }
 })
