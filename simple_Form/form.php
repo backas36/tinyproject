@@ -7,12 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>新拖延運動表單</title>
   <link rel="stylesheet" href="./css/normalize.css">
-  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/form.css">
 </head>
 
 <body>
   <div class="wrapper">
-    <form>
+    <form action="./submit.php" method="post">
       <h1 class="form__title">新拖延運動表單</h1>
       <p class="form__desc">
         活動日期：2020/12/10 ~ 2020/12/11 <br>
@@ -59,7 +59,7 @@
       <div class="form__block form__block-required">
         <div class="form__block__title ">怎麼知道這個活動的？</div>
         <div class="form__block__input">
-          <input type="text" name="referal">
+          <input type="text" name="referral">
           <div class="input__empty">請輸入怎麼知道的</div>
         </div>
       </div>
@@ -69,7 +69,7 @@
           對活動的一些建議
         </div>
         <div class="form__block__input">
-          <input type="text" name="other">
+          <input type="text" name="others">
         </div>
       </div>
 
