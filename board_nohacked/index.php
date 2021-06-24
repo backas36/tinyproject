@@ -5,8 +5,11 @@
   require_once('./utils.php');
 
   $username = NULL;
+  $user = NULL;
   if(!empty($_SESSION['username'])){
     $username = $_SESSION['username'];
+    $user = getUserFromUsername($username);
+
   }
 
   $sql = 'SELECT * FROM yang36_comments ORDER BY id DESC';
@@ -42,7 +45,13 @@
           <a href="register.php" class="board__btn">註冊</a>
           <a href="login.php" class="board__btn">登入</a>
         <?php } else { ?>
-          <a href="handle_logout.php" class="board__btn">登出</a>
+          <form action="update_user.php" method="post">
+            <span class="board__edit">編輯暱稱</span><span  class="input__field input__field-hide">
+              <input type="text" name="nickname"  />
+              <input type="submit" class="board__btn" value="更改"/>
+             </span>
+              <a href="handle_logout.php" class="board__btn">登出</a>  
+          </form>
         <?php } ?>
       </div>
 
@@ -65,7 +74,7 @@
         if(!$username){ 
           echo '你好，';
         } else { 
-          echo $username.'，';
+          echo $user['nickname'].'，';
         }
       ?>在想些什麼呢？"></textarea>
       <div class="board__submit">
@@ -90,6 +99,14 @@
       <?php } ?>
     </section>
   </main>
+
+  <script>
+    const btn = document.querySelector('.board__edit')
+    btn.addEventListener('click',(e)=>{
+      const form = document.querySelector('.input__field')
+      form.classList.toggle('input__field-hide')
+    })
+  </script>
 </body>
 
 </html>
