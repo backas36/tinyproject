@@ -135,6 +135,9 @@ form input[name="nickname"]{
 .comment__body{
   margin-left: 10px;
 }
+.comment__info a{
+  color:#0081A7;
+}
 
 .comment__author{
   color: #0081A7;
@@ -142,6 +145,7 @@ form input[name="nickname"]{
 }
 .comment__time{
   color: #a0a0a0;
+  margin-right: 12px;
 }
 .comment__content{
   margin-top: 4px;
@@ -150,6 +154,30 @@ form input[name="nickname"]{
   word-break: break-word;
   color:#41413f;
 }
+
+.page-info {
+  margin-top: 12px;
+  text-align: center;
+  color: #0081A7;
+
+}
+.paginator {
+  margin-top: 12px;
+  text-align:center;
+}
+.paginator a {
+  text-decoration: none;
+  color: #0081A7;
+  display:inline-block;
+  margin: 0 6px;
+}
+.paginator a:first-child{
+  margin-right: 12px;
+}
+.paginator a:last-child{
+  margin-left: 12px;
+}
+
 
 /* register page */
 .board__form-register span{
@@ -170,3 +198,4 @@ form input[name="nickname"]{
   font-size: 18px;
   color: #a5a59a;
 }
+

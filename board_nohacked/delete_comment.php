@@ -12,9 +12,9 @@
   $id = $_GET['id'];
   
 
-  $sql = 'update yang36_comments SET is_deleted = 1 WHERE id = ?';
+  $sql = 'update yang36_comments SET is_deleted = 1 WHERE id = ? And username = ?';
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param('i', $id);
+  $stmt->bind_param('is', $id, $username);
   $result = $stmt->execute();
 
   if(!$result){

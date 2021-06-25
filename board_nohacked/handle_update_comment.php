@@ -13,9 +13,9 @@
   $content = $_POST['content'];
   $nickname = $_POST['nickname'];
 
-  $sql = 'UPDATE yang36_comments SET content = ? WHERE id = ?';
+  $sql = 'UPDATE yang36_comments SET content = ? WHERE id = ? and username = ?';
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param('si', $content, $id);
+  $stmt->bind_param('sis', $content, $id, $username);
   $result = $stmt->execute();
 
   if(!$result){

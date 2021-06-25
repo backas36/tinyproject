@@ -5,7 +5,7 @@
   require_once('./utils.php');
 
   $id = $_GET['id'];
-  $username = NULL;
+  $username = $_SESSION['username'];
   $user = NULL;
   if(!empty($_SESSION['username'])){
     $username = $_SESSION['username'];
@@ -13,10 +13,10 @@
 
   }
 
-  $sql = 'select * from yang36_comments where id = ?';
+  $sql = 'select * from yang36_comments where id = ? and username = ?';
 
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param('i',$id);
+  $stmt->bind_param('is',$id, $username);
   $result = $stmt->execute();
   if(!$result){
     die('Error:' . $conn->error);
