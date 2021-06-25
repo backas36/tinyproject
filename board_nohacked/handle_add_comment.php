@@ -3,6 +3,7 @@
   require_once('./conn.php');
   require_once('./utils.php');
 
+  $username = $_SESSION['username'];
   
   if (empty($_POST['content'])){
     header('Location: index.php?errorCode=1');
@@ -15,10 +16,10 @@
     $nickname = $user['nickname'];
     $content = $_POST['content'];
     
-    $sql='INSERT INTO yang36_comments(nickname, content) VALUES (?,?)';
+    $sql='INSERT INTO yang36_comments(username, content) VALUES (?,?)';
     
     $stmt = $conn -> prepare($sql);
-    $stmt->bind_param('ss',$nickname, $content);
+    $stmt->bind_param('ss',$username, $content);
 
     $result = $stmt->execute();
 

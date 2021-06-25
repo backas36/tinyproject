@@ -4,7 +4,8 @@
   require_once('./conn.php');
   require_once('./utils.php');
 
-  $username = NULL;
+  $id = $_GET['id'];
+  $username = $_SESSION['username'];
   $user = NULL;
   if(!empty($_SESSION['username'])){
     $username = $_SESSION['username'];
@@ -12,32 +13,17 @@
 
   }
 
-  $page = 1;
-  if (!empty($_GET['page'])){
-    $page = intval($_GET['page']);
-  }
-  $item_per_page = 5;
-  $offset = ($page - 1) * $item_per_page;
-  
-  $sql = 'SELECT comments.id As id, '.
-          'comments.content AS content, '.
-          'comments.created_at AS created_at, '.
-          'users.nickname AS nickname, '. 
-          'users.username AS username '.
-          'FROM yang36_comments AS comments '.
-          'LEFT JOIN yang36_users AS users '.
-          'ON users.username = comments.username '.
-          'Where comments.is_deleted is NULL '.
-          'ORDER BY comments.id DESC '.
-          'limit ? offset ?';
+  $sql = 'select * from yang36_comments where id = ? and username = ?';
 
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param('ii', $item_per_page, $offset);
+  $stmt->bind_param('is',$id, $username);
   $result = $stmt->execute();
   if(!$result){
     die('Error:' . $conn->error);
   }
   $result = $stmt -> get_result();
+
+  $row = $result->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,8 +43,8 @@
   </header>
   <main class="board">
     <div class="board__header">
-      <h1 class="board_title">Comments</h1>
-      <div class="board_statu">
+      <h1 class="board_title">Edit - Comments</h1>
+      <!--<div class="board_statu">
         <?php if(!$username){ ?>
           <a href="register.php" class="board__btn">註冊</a>
           <a href="login.php" class="board__btn">登入</a>
@@ -71,7 +57,7 @@
               <a href="handle_logout.php" class="board__btn">登出</a>  
           </form>
         <?php } ?>
-      </div>
+      </div>-->
 
     </div>
     <?php 
@@ -87,22 +73,16 @@
       }
     ?>
     
-    <form action="handle_add_comment.php" method="POST" class="board__form-edit">
-      <textarea name="content" rows="5" placeholder="<?php 
-        if(!$username){ 
-          echo '你好，';
-        } else { 
-          echo $user['nickname'].'，';
-        }
-      ?>在想些什麼呢？"></textarea>
+    <form action="handle_update_comment.php" method="POST" class="board__form-edit">
+      <textarea name="content" rows="5" placeholder=""><?php echo $row['content']?></textarea>
       <div class="board__submit">
+        <input type="hidden" name="id" value="<?php echo $row['id'] ?>" />
         <input type="submit" class="board__btn-submit" value="送出">
       </div>
     </form>
 
-    <div class="board__hr"></div>
 
-    <section class="board_comments">
+    <!--<section class="board_comments">
       <?php while($row = $result->fetch_assoc()){ 
         //print_r($row)
       ?>
@@ -117,49 +97,15 @@
             <span class="comment__time"><?php echo escape($row['created_at']); ?></span>
             <?php if($row['username'] === $username){?>
               <a href="update_comment.php?id=<?php echo $row['id']?>">編輯</a>
-              <a href="delete_comment.php?id=<?php echo $row['id']?>">刪除</a>
             <?php } ?>
           </div>
           <div class="comment__content"><?php echo escape($row['content']); ?></div>
         </div>
       </div>
       <?php } ?>
-    </section>
-
-    <div class="board__hr"></div>
-    <?php
-      $sql = 'select count(id) as count from yang36_comments where is_deleted is NULL;';
-
-      $stmt = $conn->prepare($sql);
-      $result = $stmt->execute();
-      $result = $stmt->get_result();
-      $row = $result->fetch_assoc();
-      //echo $row['count']
-      $total_page = ceil($row['count'] / $item_per_page);
-    ?>
-    <div class="page-info">
-      <span>總共有 <?php echo $row['count'] ?> 筆留言， 頁數：</span>
-      <span><?php echo $page ?> / <?php echo $total_page?></span>
-    </div>
-    <div class="paginator">
-      <?php if($page !=1) { ?>
-      <a href="index.php?page=1">首頁</a>
-      <a href="index.php?page=<?php echo $page -1 ?>"> << </a>
-      <?php } ?>
-      <?php if($page != $total_page) { ?>
-      <a href="index.php?page=<?php echo $page +1 ?>"> >> </a>
-      <a href="index.php?page=<?php echo $total_page ?>">最末頁</a>
-      <?php } ?>
-    </div>
+    </section>-->
   </main>
 
-  <script>
-    const btn = document.querySelector('.board__edit')
-    btn.addEventListener('click',(e)=>{
-      const form = document.querySelector('.input__field')
-      form.classList.toggle('input__field-hide')
-    })
-  </script>
 </body>
 
 </html>

@@ -30,6 +30,37 @@ body{
   font-weight: bold;
   color: #0081A7;
 }
+form{
+  color: #0081A7;
+  font-weight: bold;
+  
+}
+.input__field-hide{
+  display:none;
+}
+
+form input[name="nickname"]{
+  outline:none;
+  border:1px solid #0081A7;
+  background-color: #fdfcdc;
+  border-radius:6px;
+  color:#7e7e76;
+  padding: 4px;
+  width: 30%;
+}
+.board_statu{
+  text-align: right;
+}
+.board_statu input.board__btn{
+  border: none;
+  padding: 7px 20px;
+  cursor: pointer;
+}
+.board__edit{
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer;
+}
 .board__btn{
   display: inline-block;
   padding: 10px 20px;
@@ -40,6 +71,7 @@ body{
   border-radius: 25px;
   opacity:0.8;
   transition:.3s;
+  cursor: pointer;
 }
 .board__btn-submit:hover,
 .board__btn:hover{
@@ -103,6 +135,9 @@ body{
 .comment__body{
   margin-left: 10px;
 }
+.comment__info a{
+  color:#0081A7;
+}
 
 .comment__author{
   color: #0081A7;
@@ -110,6 +145,7 @@ body{
 }
 .comment__time{
   color: #a0a0a0;
+  margin-right: 12px;
 }
 .comment__content{
   margin-top: 4px;
@@ -118,6 +154,30 @@ body{
   word-break: break-word;
   color:#41413f;
 }
+
+.page-info {
+  margin-top: 12px;
+  text-align: center;
+  color: #0081A7;
+
+}
+.paginator {
+  margin-top: 12px;
+  text-align:center;
+}
+.paginator a {
+  text-decoration: none;
+  color: #0081A7;
+  display:inline-block;
+  margin: 0 6px;
+}
+.paginator a:first-child{
+  margin-right: 12px;
+}
+.paginator a:last-child{
+  margin-left: 12px;
+}
+
 
 /* register page */
 .board__form-register span{
@@ -138,3 +198,4 @@ body{
   font-size: 18px;
   color: #a5a59a;
 }
+
