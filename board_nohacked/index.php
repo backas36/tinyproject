@@ -115,7 +115,7 @@
             (@<?php echo escape($row['username']); ?>)
             </span>
             <span class="comment__time"><?php echo escape($row['created_at']); ?></span>
-            <?php if($row['username'] === $username){?>
+            <?php if($row['username'] === $username && !empty($_SESSION['username'])){ ?>
               <a href="update_comment.php?id=<?php echo $row['id']?>">編輯</a>
               <a href="delete_comment.php?id=<?php echo $row['id']?>">刪除</a>
             <?php } ?>
