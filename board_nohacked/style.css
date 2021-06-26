@@ -199,3 +199,67 @@ form input[name="nickname"]{
   color: #a5a59a;
 }
 
+/* admin  */
+table.users{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 20px;
+}
+table.users .table__title{
+  color: #0081A7;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+table.users thead{
+  color: #fff;
+  background-color: #0081A7;
+  font-weight: bold;
+}
+table.users thead td:first-child{
+  border-radius: 8px 0 0 0;
+}
+table.users thead td:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+table.users td{
+  padding: 10px 12px;
+  height: 45px;
+  line-height: 45px;
+}
+table.users tr:nth-child(even){
+  background-color: #dcdaa7;
+}
+table.users tbody tr:hover{
+  background-color:#eeedcf;
+}
+form.role__form{
+  display:flex;
+  justify-content:space-between;
+  min-width: 120px;
+  align-items:center;
+}
+form .board__edit {
+  margin-right: 12px;
+}
+form.role__form .role__btn{
+   border: none;
+   padding: 6px 12px;
+   display: inline-block;
+   text-decoration: none;
+   color:#ffffff;
+   font-size: 14px;
+   background-color: #0081A7;
+   border-radius: 12px;
+   opacity:0.8;
+   transition:.3s;
+   cursor: pointer;
+}
+form.role__form .role__btn:hover{
+  opacity: 1;
+}
+.form-hide{
+  /*display: none;*/
+}

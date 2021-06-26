@@ -155,10 +155,12 @@
 
   <script>
     const btn = document.querySelector('.board__edit')
-    btn.addEventListener('click',(e)=>{
-      const form = document.querySelector('.input__field')
-      form.classList.toggle('input__field-hide')
-    })
+    if(btn){
+     btn.addEventListener('click',(e)=>{
+        const form = document.querySelector('.input__field')
+        form.classList.toggle('input__field-hide')
+     })
+    }
   </script>
 </body>
 

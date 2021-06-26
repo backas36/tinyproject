@@ -1,0 +1,64 @@
+<!-- 網址在這 http://mentor-program.co/mtr04group5/yang36/week9_hw1/index.php -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comments - admin</title>
+  <link rel="stylesheet" href="./reset.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <header class="header__warning">
+    注意！本站為練習用網站，因教學用途刻意忽略資安的實作，註冊時請勿使用任何真實的帳號或密碼。
+  </header>
+  <main class="board">
+    <table class="users">
+      <caption class="table__title"> 使用者一覽表</caption>
+      <thead>
+        <tr>
+          <td>User ID</td>
+          <td>Nickname</td>
+          <td>Username</td>
+          <td>Role</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>編號</td>
+          <td>暱稱</td>
+          <td>帳號</td>
+          <td>
+            <form action="update_user.php" method="post" class="role__form">
+              <span class="board__edit">regular</span>
+              <select class="input__field form-hide" name="role">
+                <option value="regular">regular</option>
+                <option value="ban">ban</option>
+                <option value="admin">admin</option>
+              </select>
+              <input type="submit" class="role__btn" value="更改" />
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>編號</td>
+          <td>暱稱</td>
+          <td>帳號</td>
+          <td>
+            admin
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </main>
+
+
+</body>
+
+</html>
