@@ -87,7 +87,7 @@
       }
     ?>
     <?php if (!$username){ ?>
-      <div class="comment__warning">請先登入</div>
+      <div class="comment__warning">要留言的話，請先登入</div>
       
     <?php } else if($user['role'] == 'ban') { ?>
       <div class="comment__warning">你沒有權限留言</div>
@@ -121,8 +121,9 @@
             (@<?php echo escape($row['username']); ?>)
             </span>
             <span class="comment__time"><?php echo escape($row['created_at']); ?></span>
-            <?php if($row['username'] === $username && !empty($_SESSION['username'])
-                    || $user['role'] == 'admin'){ ?>
+            
+            <?php if(($row['username'] === $username && !empty($_SESSION['username'])) || 
+                      (!is_null($user) && $user['role'] == 'admin')){ ?>
               <a href="update_comment.php?id=<?php echo $row['id']?>">編輯</a>
               <a href="delete_comment.php?id=<?php echo $row['id']?>">刪除</a>
             <?php } ?>
