@@ -115,7 +115,7 @@ form input[name="nickname"]{
   height: 2px;
   background-color: #e8e8e8;
   width: 95%;
-  margin: 0 auto;
+  margin: 8px auto;
 }
 .board_comments{
   margin-top: 20px;

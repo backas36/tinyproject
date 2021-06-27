@@ -86,19 +86,25 @@
         echo '<div class="comment__warning">'. $msg .'</div>';
       }
     ?>
-    
-    <form action="handle_add_comment.php" method="POST" class="board__form-edit">
-      <textarea name="content" rows="5" placeholder="<?php 
-        if(!$username){ 
-          echo '你好，';
-        } else { 
-          echo $user['nickname'].'，';
-        }
-      ?>在想些什麼呢？"></textarea>
-      <div class="board__submit">
-        <input type="submit" class="board__btn-submit" value="送出">
-      </div>
-    </form>
+    <?php if (!$username){ ?>
+      <div class="comment__warning">請先登入</div>
+      
+    <?php } else if($user['role'] == 'ban') { ?>
+      <div class="comment__warning">你沒有權限留言</div>
+    <?php } else {?>
+      <form action="handle_add_comment.php" method="POST" class="board__form-edit">
+        <textarea name="content" rows="5" placeholder="<?php 
+          if(!$username){ 
+            echo '你好，';
+          } else { 
+            echo $user['nickname'].'，';
+          }
+        ?>在想些什麼呢？"></textarea>
+        <div class="board__submit">
+          <input type="submit" class="board__btn-submit" value="送出">
+        </div>
+      </form>
+    <?php }?>
 
     <div class="board__hr"></div>
 
@@ -115,7 +121,8 @@
             (@<?php echo escape($row['username']); ?>)
             </span>
             <span class="comment__time"><?php echo escape($row['created_at']); ?></span>
-            <?php if($row['username'] === $username && !empty($_SESSION['username'])){ ?>
+            <?php if($row['username'] === $username && !empty($_SESSION['username'])
+                    || $user['role'] == 'admin'){ ?>
               <a href="update_comment.php?id=<?php echo $row['id']?>">編輯</a>
               <a href="delete_comment.php?id=<?php echo $row['id']?>">刪除</a>
             <?php } ?>
