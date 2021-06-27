@@ -41,6 +41,11 @@
     注意！本站為練習用網站，因教學用途刻意忽略資安的實作，註冊時請勿使用任何真實的帳號或密碼。
   </header>
   <main class="board">
+    <div class="admin__header">
+        <a href="index.php" class="board__btn">留言板</a>
+        <a href="handle_logout.php" class="board__btn">登出</a>  
+    </div>
+   
     <table class="users">
       <caption class="table__title"> 使用者一覽表</caption>
       <thead>
@@ -55,23 +60,23 @@
         <?php while ($row = $result->fetch_assoc()){
         ?>
         <tr>
-          <td><?php echo $row['id'] ?></td>
+          <td><?php echo escape($row['id']) ?></td>
           <td><?php echo escape($row['nickname']) ?></td>
           <td><?php echo escape($row['username']) ?></td>
           <td>
             <form action="handle_role.php" method="post" class="role__form">
-              <input type="hidden" name="id" value="<?php echo $row['id']?>">
+              <input type="hidden" name="id" value="<?php echo escape($row['id'])?>">
               <select class="input__field form-hide" name="role">
-                <?php if($row['role'] == 'admin' ){?>
-                  <option value="regular">regular</option>
+                <?php if(escape($row['role']) == 'admin' ){?>
+                  <option value="normal">normal</option>
                   <option value="ban" >ban</option>
                   <option value="admin" selected>admin</option>
                 <?php } else if($row['role']== 'normal') {?>
-                  <option value="regular" selected>regular</option>
+                  <option value="normal" selected>normal</option>
                   <option value="ban">ban</option>
                   <option value="admin">admin</option>
                 <?php } else if($row['role'] == 'ban'){ ?>
-                  <option value="regular">regular</option>
+                  <option value="normal">normal</option>
                   <option value="ban" selected>ban</option>
                   <option value="admin" >admin</option>  
                 <?php }?>

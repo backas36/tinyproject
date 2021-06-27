@@ -23,7 +23,7 @@ body{
 .board__header{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-start;
 }
 .board_title{
   font-size: 32px;
@@ -51,10 +51,17 @@ form input[name="nickname"]{
 .board_statu{
   text-align: right;
 }
+.board_statu form{
+  margin-top: 12px;
+  margin-bottom: 20px;
+  height: 32px;
+}
 .board_statu input.board__btn{
   border: none;
-  padding: 7px 20px;
+  padding: 6px 12px;
   cursor: pointer;
+  font-size: 14px;
+  border-radius: 6px;
 }
 .board__edit{
   text-decoration: underline;
@@ -205,6 +212,10 @@ form input[name="nickname"]{
 }
 
 /* admin  */
+.admin__header{
+  margin-bottom: 20px;
+  text-align: right;
+}
 table.users{
   width: 100%;
   border-collapse: collapse;
