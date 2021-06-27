@@ -9,7 +9,6 @@
   if(!empty($_SESSION['username'])){
     $username = $_SESSION['username'];
     $user = getUserFromUsername($username);
-
   }
 
   $page = 1;
@@ -88,16 +87,18 @@
     ?>
     
     <form action="handle_add_comment.php" method="POST" class="board__form-edit">
-      <textarea name="content" rows="5" placeholder="<?php 
-        if(!$username){ 
-          echo '你好，';
-        } else { 
-          echo $user['nickname'].'，';
-        }
-      ?>在想些什麼呢？"></textarea>
-      <div class="board__submit">
+      <?php if($username && !hasPermission($user,'create',NULL)) {?>
+        <div class="login__warning">你已經被停權</div>
+      <?php } else if($username) { ?>
+        <textarea textarea name="content" rows="5" placeholder = "<?php echo $user['nickname']; ?>，想些什麼？"></textarea>
+          <div class="board__submit">
         <input type="submit" class="board__btn-submit" value="送出">
       </div>
+      <?php } else { ?>
+        <div class="login__warning">請先登入再留言</div>
+      <?php } ?>
+    
+    
     </form>
 
     <div class="board__hr"></div>
@@ -115,7 +116,7 @@
             (@<?php echo escape($row['username']); ?>)
             </span>
             <span class="comment__time"><?php echo escape($row['created_at']); ?></span>
-            <?php if($row['username'] === $username && !empty($_SESSION['username'])){ ?>
+            <?php if(hasPermission($user,'update',$row)){ ?>
               <a href="update_comment.php?id=<?php echo $row['id']?>">編輯</a>
               <a href="delete_comment.php?id=<?php echo $row['id']?>">刪除</a>
             <?php } ?>
@@ -163,3 +164,4 @@
 </body>
 
 </html>
+

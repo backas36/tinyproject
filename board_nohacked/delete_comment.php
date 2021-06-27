@@ -9,12 +9,21 @@
   }
 
   $username = $_SESSION['username'];
+  $user = getUserFromUsername($username);
   $id = $_GET['id'];
   
-
   $sql = 'update yang36_comments SET is_deleted = 1 WHERE id = ? And username = ?';
+  if(isAdmin($user)){
+    $sql = 'update yang36_comments SET is_deleted = 1 WHERE id = ?';
+  }
+  
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param('is', $id, $username);
+  
+  if(isAdmin($user)) {
+    $stmt->bind_param('i', $id);
+  } else {
+    $stmt->bind_param('is', $id, $username);
+  }
   $result = $stmt->execute();
 
   if(!$result){

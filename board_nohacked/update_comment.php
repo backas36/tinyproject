@@ -10,13 +10,24 @@
   if(!empty($_SESSION['username'])){
     $username = $_SESSION['username'];
     $user = getUserFromUsername($username);
-
   }
+
+
 
   $sql = 'select * from yang36_comments where id = ? and username = ?';
 
+  if(isAdmin($user)){
+    $sql = 'select * from yang36_comments where id = ?';
+  }
+ 
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param('is',$id, $username);
+ 
+  if(isAdmin($user)){
+    $stmt -> bind_param('i', $id);
+  } else {
+    $stmt->bind_param('is',$id, $username);
+  }
+
   $result = $stmt->execute();
   if(!$result){
     die('Error:' . $conn->error);
@@ -44,21 +55,6 @@
   <main class="board">
     <div class="board__header">
       <h1 class="board_title">Edit - Comments</h1>
-      <!--<div class="board_statu">
-        <?php if(!$username){ ?>
-          <a href="register.php" class="board__btn">註冊</a>
-          <a href="login.php" class="board__btn">登入</a>
-        <?php } else { ?>
-          <form action="update_user.php" method="post">
-            <span class="board__edit">編輯暱稱</span><span  class="input__field input__field-hide">
-              <input type="text" name="nickname"  />
-              <input type="submit" class="board__btn" value="更改"/>
-             </span>
-              <a href="handle_logout.php" class="board__btn">登出</a>  
-          </form>
-        <?php } ?>
-      </div>-->
-
     </div>
     <?php 
       if(!empty($_GET['errorCode'])){
@@ -80,30 +76,6 @@
         <input type="submit" class="board__btn-submit" value="送出">
       </div>
     </form>
-
-
-    <!--<section class="board_comments">
-      <?php while($row = $result->fetch_assoc()){ 
-        //print_r($row)
-      ?>
-      <div class="board__comment">
-        <div class="comment__avatar"></div>
-        <div class="comment__body">
-          <div class="comment__info">
-            <span class="comment__author">
-            <?php echo escape($row['nickname']); ?>
-            (@<?php echo escape($row['username']); ?>)
-            </span>
-            <span class="comment__time"><?php echo escape($row['created_at']); ?></span>
-            <?php if($row['username'] === $username){?>
-              <a href="update_comment.php?id=<?php echo $row['id']?>">編輯</a>
-            <?php } ?>
-          </div>
-          <div class="comment__content"><?php echo escape($row['content']); ?></div>
-        </div>
-      </div>
-      <?php } ?>
-    </section>-->
   </main>
 
 </body>
