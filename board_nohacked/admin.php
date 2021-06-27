@@ -48,7 +48,7 @@
           <td><?php echo escape($row['username']) ?></td>
           <td>
             <form action="handle_role.php" method="post" class="role__form">
-                
+              <input type="hidden" name="id" value="<?php echo $row['id']?>">
               <select class="input__field form-hide" name="role">
                 <?php if($row['role'] == 'admin' ){?>
                   <option value="regular">regular</option>
@@ -88,23 +88,7 @@
           form.appendChild(input)
         
       }
-      //if(e.target.classList.contains('board__edit')){
-      //  const form = e.target.parentElement
-      //  const select = e.target.nextElementSibling
-      //  select.classList.toggle('form-hide')
-
-        //const renderBtn =  (e) =>{
-        //  const input = document.createElement('input')
-        //  input.classList.add('role__btn')
-        //  input.setAttribute('value','更改')
-        //  input.setAttribute('type','submit')
-        //  form.appendChild(input)
-        //}
-
-      //  if(form.lastElementChild.tagName.toLowerCase() !== 'input'){
-      //    select.addEventListener('change', renderBtn(e))
-      //  }
-      //}
+      
     })
 
   </script>
