@@ -9,7 +9,7 @@
     if (empty($_POST['article_title']) || 
         empty($_POST['category_id']) || 
         empty($_POST['article_content']) ){
-    header('Location: index.php?errorCode=1');
+    header('Location: add_article.php?errorCode=1');
     die();
   }
 
@@ -28,5 +28,5 @@
   if(!$result){
     die($conn->error);
   }
-  header('Location: index.php');
+  header('Location:article_all.php');
 ?>

@@ -47,7 +47,7 @@
           </div>
           <?php 
             $top_comments_amount = 5;
-            $sql = 'SELECT C.content , A.article_title, C.created_at, C.article_id, A.category_id '.
+            $sql = 'SELECT C.content, C.username , A.article_title, C.created_at, C.article_id, A.category_id '.
                    'FROM yang36_blog_comments AS C '.
                    'LEFT JOIN yang36_articles AS A '.
                    'ON C.article_id = A.article_id '.
@@ -75,6 +75,7 @@
                   <?php echo escape($commets_top['content']) ;?>
                 
                 </p>
+                <p class="comment__time"><?php echo escape($commets_top['username']) ;?></p>
                 <p class="comment__time"><?php echo escape($commets_top['created_at']) ;?></p>
               </div>
             <?php } ?>

@@ -35,15 +35,15 @@
             <div class="article__title"><?php echo escape($article['article_title'])?></div>
             <div class="article__time"><?php echo escape($article['created_at'])?></div>
           </div>
-          <div class="article__body">
+          <div class="article__body article-nolimit">
             <p><?php echo escape($article['article_content'])?></p>
           </div>
           <div class="article__footer">
             <div class="article-comments">
               <h2>Comments</h2>
               <?php 
-                $sql = 'SELECT * FROM yang36_blog_comments '. 
-                        'AS BC LEFT JOIN yang36_articles AS A '. 
+                $sql = 'SELECT BC.username, BC.created_at, BC.content FROM yang36_blog_comments AS BC '. 
+                        'LEFT JOIN yang36_articles AS A '. 
                         'ON BC.article_id = A.article_id '.
                         'WHERE BC.is_deleted is NULL '.
                         'AND A.category_id = ? '.
@@ -60,7 +60,8 @@
               ?>
               <div class="article-comment">
                 <div class="article-comment__header">
-                  <div class="article-comment__nickname"><?php echo escape(getUserFromUsername($row['username'])['nickname'])?></div>
+                  <div class="article-comment__nickname"><?php echo $row['username']; ?></div>
+                 
                   <div class="article-comment__time">
                   <?php echo escape($row['created_at']) ?>
                   </div>

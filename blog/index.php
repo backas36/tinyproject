@@ -14,6 +14,20 @@
       </ol>
     <div class="wrapper">
       <div class="articles">
+         <?php 
+          if(!empty($_GET['errorCode'])){
+            $errorCode = $_GET['errorCode'];
+            $msg = 'error';
+            if($errorCode === '1'){
+              $msg = '請填入完整的資料';
+            }else if ($errorCode === '2'){
+              $msg = '查無此帳號，要不要註冊一個？';
+            }else if ($errorCode === '3'){
+              $msg = '密碼錯誤';
+            }
+            echo '<div class="form__warning"><p>'. $msg .'</p></div>';
+          }
+        ?>
         <?php  
           $page = 1;  
           if(!empty($_GET['page'])){

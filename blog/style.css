@@ -479,7 +479,7 @@ a.btn-light:hover {
   }
 
   .wrapper {
-    max-width: 1280px;
+    max-width: 1400px;
     margin: 0 auto;
   }
 
@@ -590,6 +590,11 @@ a.btn-light:hover {
     font-weight: 300;
     padding: 0 50px 0 0;
     color: #444;
+  }
+
+  .article-nolimit {
+    display: block;
+    white-space: pre-wrap;
   }
 
   .admin__articles .article {

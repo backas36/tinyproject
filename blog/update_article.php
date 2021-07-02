@@ -18,6 +18,20 @@
     </ol>
     <div class="wrapper">
       <div class="articles">
+           <?php 
+          if(!empty($_GET['errorCode'])){
+            $errorCode = $_GET['errorCode'];
+            $msg = 'error';
+            if($errorCode === '1'){
+              $msg = '請填入完整的資料';
+            }else if ($errorCode === '2'){
+              $msg = '查無此帳號，要不要註冊一個？';
+            }else if ($errorCode === '3'){
+              $msg = '密碼錯誤';
+            }
+            echo '<div class="form__warning"><p>'. $msg .'</p></div>';
+          }
+        ?>
         <form action="handle_update_article.php" method="post">
           <div class="article">
             <div class="article__header">
@@ -27,9 +41,7 @@
               </div>
               <div class="article__time">
                 <div class="title">文章分類：</div>
-                
-                      
-                 <?php 
+                <?php 
                   $sql = 'SELECT * FROM yang36_categories WHERE is_deleted is NULL';
                   $stmt = $conn -> prepare($sql);
                   $result = $stmt->execute();
@@ -50,18 +62,13 @@
                   <?php } ?>
                 </select>
 
-
-
-
               </div>
               <div class="article__time">
                 <?php echo escape($article['created_at'])?></div>
             </div>
             <div class="article__body">
               <div class="title">文章內容：</div>
-              <textarea name="article_content"  cols="60" rows="30">
-                <?php echo escape($article['article_content'])?>
-              </textarea>
+              <textarea name="article_content"  cols="60" rows="30"><?php echo escape($article['article_content'])?></textarea>
             </div>
            
           </div>
@@ -71,20 +78,7 @@
 
           <input type="submit" class="submit-btn" value="確認編輯"/>
         </form>
-         <?php 
-          if(!empty($_GET['errorCode'])){
-            $errorCode = $_GET['errorCode'];
-            $msg = 'error';
-            if($errorCode === '1'){
-              $msg = '請填入完整的資料';
-            }else if ($errorCode === '2'){
-              $msg = '查無此帳號，要不要註冊一個？';
-            }else if ($errorCode === '3'){
-              $msg = '密碼錯誤';
-            }
-            echo '<div class="form__warning"><p>'. $msg .'</p></div>';
-          }
-        ?>
+    
       </div>
 
 <?php
