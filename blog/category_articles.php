@@ -4,7 +4,10 @@
     exit;
   }
   $category_id = $_GET['category_id'];
-
+  $page_origin = NULL;
+  if(isset($_GET['role'])){
+    $page_origin = $_GET['role'];
+  }
 
   include('./header.php');
   include('./banner.php');
@@ -50,7 +53,7 @@
         </div>
         <?php } ?>
       </div>
- 
+
 <?php
   include('./sidebar.php') ;
   include('./footer.php');
