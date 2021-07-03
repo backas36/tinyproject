@@ -19,3 +19,6 @@ HTMl JS CSS 的綜合練習，做出外觀功能都不錯的 todo list。
 
 # gameStream
 串接 Twitch API 來產生動態的網頁
+
+# blog 
+> 此blog作品是 Huli - Lidemy 5th 計畫的作業
