@@ -1,11 +1,8 @@
+<!-- 網址在這 http://mentor-program.co/mtr04group5/yang36/week11_hw2/index.php -->
+
 <?php
-
-
   include('./header.php');
-
   include('./banner.php');
-
-
 ?>
 
   <main>
