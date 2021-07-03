@@ -9,13 +9,21 @@
   }
 
   $username = $_SESSION['username'];
+  $user = getUserFromUsername($username);
   $id = $_POST['id'];
   $content = $_POST['content'];
-  $nickname = $_POST['nickname'];
 
   $sql = 'UPDATE yang36_comments SET content = ? WHERE id = ? and username = ?';
+  if(isAdmin($user)){
+    $sql = 'UPDATE yang36_comments SET content = ? WHERE id = ?';
+  }  
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param('sis', $content, $id, $username);
+
+  if(isAdmin($user)){
+    $stmt->bind_param('si', $content, $id);
+  } else {
+    $stmt->bind_param('sis', $content, $id, $username);
+  }
   $result = $stmt->execute();
 
   if(!$result){

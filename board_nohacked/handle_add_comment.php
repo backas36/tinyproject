@@ -4,7 +4,12 @@
   require_once('./utils.php');
 
   $username = $_SESSION['username'];
-  
+  $user = getUserFromUsername($username);
+
+  if(!hasPermission($user, 'create', NULL)){
+    header('Location: index.php');
+    exit();
+  }
   if (empty($_POST['content'])){
     header('Location: index.php?errorCode=1');
     die();

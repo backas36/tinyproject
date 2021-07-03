@@ -9,7 +9,6 @@
   if(!empty($_SESSION['username'])){
     $username = $_SESSION['username'];
     $user = getUserFromUsername($username);
-
   }
 
   $page = 1;
@@ -56,20 +55,26 @@
     注意！本站為練習用網站，因教學用途刻意忽略資安的實作，註冊時請勿使用任何真實的帳號或密碼。
   </header>
   <main class="board">
+   
     <div class="board__header">
+       
       <h1 class="board_title">Comments</h1>
       <div class="board_statu">
         <?php if(!$username){ ?>
           <a href="register.php" class="board__btn">註冊</a>
           <a href="login.php" class="board__btn">登入</a>
         <?php } else { ?>
+          <?php if($user && $user['role']==='admin'){ ?>
+          <a href="admin.php" class="board__btn">後台管理</a>
+          <?php } ?>  
+          <a href="handle_logout.php" class="board__btn">登出</a>  
           <form action="update_user.php" method="post">
             <span class="board__edit">編輯暱稱</span><span  class="input__field input__field-hide">
               <input type="text" name="nickname"  />
               <input type="submit" class="board__btn" value="更改"/>
              </span>
-              <a href="handle_logout.php" class="board__btn">登出</a>  
           </form>
+          
         <?php } ?>
       </div>
 
@@ -88,16 +93,18 @@
     ?>
     
     <form action="handle_add_comment.php" method="POST" class="board__form-edit">
-      <textarea name="content" rows="5" placeholder="<?php 
-        if(!$username){ 
-          echo '你好，';
-        } else { 
-          echo $user['nickname'].'，';
-        }
-      ?>在想些什麼呢？"></textarea>
-      <div class="board__submit">
+      <?php if($username && !hasPermission($user,'create',NULL)) {?>
+        <div class="login__warning">你已經被停權</div>
+      <?php } else if($username) { ?>
+        <textarea textarea name="content" rows="5" placeholder = "<?php echo $user['nickname']; ?>，想些什麼？"></textarea>
+          <div class="board__submit">
         <input type="submit" class="board__btn-submit" value="送出">
       </div>
+      <?php } else { ?>
+        <div class="login__warning">請先登入再留言</div>
+      <?php } ?>
+    
+    
     </form>
 
     <div class="board__hr"></div>
@@ -115,7 +122,7 @@
             (@<?php echo escape($row['username']); ?>)
             </span>
             <span class="comment__time"><?php echo escape($row['created_at']); ?></span>
-            <?php if($row['username'] === $username && !empty($_SESSION['username'])){ ?>
+            <?php if(hasPermission($user,'update',$row)){ ?>
               <a href="update_comment.php?id=<?php echo $row['id']?>">編輯</a>
               <a href="delete_comment.php?id=<?php echo $row['id']?>">刪除</a>
             <?php } ?>
@@ -155,11 +162,15 @@
 
   <script>
     const btn = document.querySelector('.board__edit')
-    btn.addEventListener('click',(e)=>{
+    if(btn){
+      btn.addEventListener('click',(e)=>{
       const form = document.querySelector('.input__field')
       form.classList.toggle('input__field-hide')
     })
+    }
+  
   </script>
 </body>
 
 </html>
+
