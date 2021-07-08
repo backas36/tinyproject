@@ -72,8 +72,6 @@
           }
 
           callback(undefined, data)
-          //appendCommentToDOM($('.comments'), newCommentData, false)
-          console.log(newCommentData)
 
         },
         error: function (error) {
@@ -103,6 +101,8 @@
           return
         }
         alert('留言新增成功')
+        $('.comments').empty()
+        getCommentsCb()
       })
     }
 
