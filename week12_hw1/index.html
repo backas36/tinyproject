@@ -25,6 +25,7 @@
               <div class="card comment mt-3">
                 <div class="card-body">
                   <h5 class="card-title">${escapeOutput(comment.nickname)}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">${escapeOutput(comment.created_at)}</h6>
                   <p class="card-text">${escapeOutput(comment.content)}</p>
                 </div>
               </div>
@@ -77,9 +78,24 @@
 
             $('input[name=nickname]').val('')
             $('textarea[name=content]').val('')
+            $.ajax({
+              method: 'GET',
+              url: 'http://localhost:8888/week12_hw1/api_comments.php?site_key=1234',
+              success: function (data) {
+                if (data.ok) {
+                  alert(data.message)
+                  return
+                }
+                const comments = data
+                console.log(comments[0])
+                appendCommentToDOM(commentsDom, comments[0], false)
+              },
 
+              error: function (error) {
+                console.log(error)
+              }
+            })
 
-            appendCommentToDOM(commentsDom, newComment, false)
 
           }
         })
