@@ -72,6 +72,9 @@
           }
 
           callback(undefined, data)
+          //appendCommentToDOM($('.comments'), newCommentData, false)
+          console.log(newCommentData)
+
         },
         error: function (error) {
           callback('資料庫連線錯誤')
@@ -99,7 +102,7 @@
           alert(error + 'here')
           return
         }
-
+        alert('留言新增成功')
       })
     }
 
@@ -113,8 +116,7 @@
         addCommentCb()
         $('input[name=nickname]').val('')
         $('textarea[name=content]').val('')
-        $('.comments').empty()
-        getCommentsCb()
+
       })
 
     })
