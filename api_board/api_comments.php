@@ -1,7 +1,9 @@
 <?php
   require_once('./conn.php');
 
-  header('Content-Type:application/json;charset=utf-8');
+  header('Content-Type:application/json;charset=utf8mb4');
+  header('Access-Control-Allow-Origin: *');
+
 
   if(empty($_GET['site_key'])){
       $json = array(
@@ -16,7 +18,7 @@
   
   $site_key = $_GET['site_key'];
 
-  $sql = 'SELECT nickname, content, created_at FROM yang36_discussions WHERE site_key = ? ORDER BY id DESC';
+  $sql = 'SELECT nickname, content, created_at FROM yang36_discussions WHERE site_key = ? AND is_deleted = 0 ORDER BY id DESC';
   $stmt = $conn -> prepare($sql);
   $stmt -> bind_param('s', $site_key);
   $result = $stmt -> execute();
