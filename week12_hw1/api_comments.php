@@ -33,7 +33,7 @@
     array_push($discussions,array(
       'nickname' => $row['nickname'],
       'content' => $row['content'],
-      'created_at' => $row['created_at']
+      'created_at' => $row['created_at'],
     ));
   };
   $response = json_encode($discussions);
