@@ -5,7 +5,9 @@
   header('Access-Control-Allow-Origin: *');
 
 
-  if(empty($_GET['site_key'])){
+  if(is_null($_GET['site_key'])||
+     is_null($_GET['limit'])||
+     is_null($_GET['offset'])){
       $json = array(
         "ok" => false,
         "message" => "Please add site_key in url."
@@ -17,10 +19,13 @@
 
   
   $site_key = $_GET['site_key'];
+  $limit = $_GET['limit'];
+  $offset = $_GET['offset'];
+  
 
-  $sql = 'SELECT nickname, content, created_at FROM yang36_discussions WHERE site_key = ? AND is_deleted = 0 ORDER BY id DESC';
+  $sql = 'SELECT nickname, content, created_at FROM yang36_discussions WHERE site_key = ? AND is_deleted = 0 ORDER BY id DESC LIMIT ? OFFSET ?';
   $stmt = $conn -> prepare($sql);
-  $stmt -> bind_param('s', $site_key);
+  $stmt -> bind_param('sii', $site_key, $limit, $offset);
   $result = $stmt -> execute();
   if(!$result){
     $json = array(

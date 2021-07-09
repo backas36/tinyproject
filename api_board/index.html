@@ -12,6 +12,12 @@
   <script>
     $(document).ready(() => {
       const commentsDOM = $('.comments')
+      const requestData = {
+        commentLimit: 5,
+        commentOffset: 0,
+        hasData: false
+      }
+
       const escapeOutput = (toOutput) => {
         return toOutput.replace(/\&/g, '&amp;')
           .replace(/\</g, '&lt;')
@@ -34,10 +40,10 @@
         targetDOM.append(html)
       }
 
-      const getComments = (callback) => {
+      const getComments = (requestData, callback) => {
         $.ajax({
           type: 'GET',
-          url: 'http://localhost:8888/api_board/api_comments.php?site_key=1234',
+          url: `http://localhost:8888/api_board/api_comments.php?site_key=1234&limit=${requestData.commentLimit}&offset=${requestData.commentOffset}`,
           success: function (response) {
             if (!response.ok) {
               callback(response.message)
@@ -69,16 +75,24 @@
         })
       }
 
-      const getCommentsCb = () => {
-        getComments((error, response) => {
+      const getCommentsCb = (requestData) => {
+        getComments(requestData, (error, response) => {
           if (error) {
             alert(error)
             return
           }
-          const comments = response.discussions
-          comments.forEach(comment => [
-            appendCommentToDOM(commentsDOM, comment)
-          ])
+          if (response.discussions.length <= 0) {
+            $('.load__field').html(`<button type="button" class="btn btn-primary load__btn disabled">NOMORE DATA</button>`)
+            requestData.hasData = false
+          } else {
+            const comments = response.discussions
+            comments.forEach(comment => [
+              appendCommentToDOM(commentsDOM, comment)
+            ])
+            $('.load__field').html(`<button type="button" class="btn btn-primary load__btn">Load more</button>`)
+            requestData.hasData = true
+          }
+
         })
       }
 
@@ -91,13 +105,16 @@
 
           alert('留言新增成功')
           commentsDOM.empty()
-          getCommentsCb()
+          requestData.commentLimit = 5
+          requestData.commentOffset = 0
+          getCommentsCb(requestData)
+
           $('input[name=nickname]').val('')
           $('textarea[name=content]').val('')
         })
       }
 
-      getCommentsCb()
+      getCommentsCb(requestData)
 
       $('.add__comment__form').on('submit', (event) => {
         event.preventDefault()
@@ -107,6 +124,12 @@
           content: $('textarea[name=content]').val()
         }
         addCommentCb(newCommentData)
+
+      })
+
+      $('.load__field').on('click', $('.load__btn'), (event) => {
+        requestData.commentOffset = requestData.commentLimit + requestData.commentOffset
+        getCommentsCb(requestData)
 
       })
     })
@@ -139,21 +162,13 @@
 
       <div class="row comments">
       </div>
+      <div class="row d-grid gap-2 col-4 mx-auto load__field">
+      </div>
+
     </div>
+
   </main>
 
-  <template>
-    <div class="card comment mb-3">
-      <div class="card-body">
-        <h5 class="card-title">留言者</h5>
-        <h6 class="card-subtitle mb-2 text-muted">2021/05/20 05:20</h6>
-        <p class="card-text"> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate accusamus quae
-          doloribus rerum alias minima amet a nostrum. Distinctio, repellendus laboriosam! Nihil officia minus quas
-          animi quibusdam iste porro exercitationem.
-        </p>
-      </div>
-    </div>
-  </template>
 </body>
 
 </html>
