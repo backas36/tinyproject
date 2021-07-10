@@ -13,11 +13,11 @@
     $(document).ready(() => {
       const commentsDOM = $('.comments')
       const requestData = {
-        commentLimit: 5,
-        commentOffset: 0,
-        hasData: false
+        site_key: '1234',
+        before: 0,
+        lastId: null,
+        isEnd: false
       }
-
       const escapeOutput = (toOutput) => {
         return toOutput.replace(/\&/g, '&amp;')
           .replace(/\</g, '&lt;')
@@ -41,9 +41,10 @@
       }
 
       const getComments = (requestData, callback) => {
+        const url = `http://localhost:8888/api_board/api_comments.php?site_key=${requestData.site_key}&before=${requestData.before}`
         $.ajax({
           type: 'GET',
-          url: `http://localhost:8888/api_board/api_comments.php?site_key=1234&limit=${requestData.commentLimit}&offset=${requestData.commentOffset}`,
+          url,
           success: function (response) {
             if (!response.ok) {
               callback(response.message)
@@ -76,23 +77,33 @@
       }
 
       const getCommentsCb = (requestData) => {
+        $('.load__btn').hide()
+
+        if (requestData.isEnd) {
+          console.log(requestData.isEnd)
+
+          return
+        }
         getComments(requestData, (error, response) => {
           if (error) {
             alert(error)
             return
           }
-          if (response.discussions.length <= 0) {
-            $('.load__field').html(`<button type="button" class="btn btn-primary load__btn disabled">NOMORE DATA</button>`)
-            requestData.hasData = false
-          } else {
-            const comments = response.discussions
-            comments.forEach(comment => [
-              appendCommentToDOM(commentsDOM, comment)
-            ])
-            $('.load__field').html(`<button type="button" class="btn btn-primary load__btn">Load more</button>`)
-            requestData.hasData = true
-          }
+          const comments = response.discussions
+          const commentsLength = comments.length
 
+          comments.forEach(comment => [
+            appendCommentToDOM(commentsDOM, comment)
+          ])
+          if (commentsLength === 0) {
+            requestData.isEnd = true
+            return
+          } else {
+            lastId = comments[comments.length - 1].id
+            requestData.before = lastId
+
+            $('.load__field').html(`<button type="button" class="btn btn-primary load__btn">Load more</button>`)
+          }
         })
       }
 
@@ -105,8 +116,9 @@
 
           alert('留言新增成功')
           commentsDOM.empty()
-          requestData.commentLimit = 5
-          requestData.commentOffset = 0
+          requestData.before = 0
+          requestData.lastId = null
+          requestData.isEnd = false
           getCommentsCb(requestData)
 
           $('input[name=nickname]').val('')
@@ -128,7 +140,6 @@
       })
 
       $('.load__field').on('click', $('.load__btn'), (event) => {
-        requestData.commentOffset = requestData.commentLimit + requestData.commentOffset
         getCommentsCb(requestData)
 
       })
