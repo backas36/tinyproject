@@ -40,7 +40,7 @@
         targetDOM.append(html)
       }
 
-      const getComments = (requestData, callback) => {
+      const getCommentsAPI = (requestData, callback) => {
         const url = `http://localhost:8888/api_board/api_comments.php?site_key=${requestData.site_key}&before=${requestData.before}`
         $.ajax({
           type: 'GET',
@@ -58,7 +58,7 @@
         })
       }
 
-      const addCommentToServer = (newCommentData, callback) => {
+      const addCommentAPI = (newCommentData, callback) => {
         $.ajax({
           type: 'POST',
           url: 'http://localhost:8888/api_board/api_add_comments.php',
@@ -77,21 +77,18 @@
       }
 
       const getCommentsCb = (requestData) => {
-        $('.load__btn').hide()
+        $('.load__field').empty()
 
         if (requestData.isEnd) {
-          console.log(requestData.isEnd)
-
           return
         }
-        getComments(requestData, (error, response) => {
+        getCommentsAPI(requestData, (error, response) => {
           if (error) {
             alert(error)
             return
           }
           const comments = response.discussions
           const commentsLength = comments.length
-
           comments.forEach(comment => [
             appendCommentToDOM(commentsDOM, comment)
           ])
@@ -108,7 +105,7 @@
       }
 
       const addCommentCb = (newCommentData) => {
-        addCommentToServer(newCommentData, (error, response) => {
+        addCommentAPI(newCommentData, (error, response) => {
           if (error) {
             alert(error)
             return
