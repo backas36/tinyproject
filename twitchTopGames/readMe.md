@@ -1,4 +1,6 @@
-# project 說明
+# Lidemy 程式導師實驗計畫第五期
+## week11作業 
+## project 說明
 串接 twitch API 來製作一個可以得到目前的 topGame 以及 前二十名的 stream。
 
 # key concepts

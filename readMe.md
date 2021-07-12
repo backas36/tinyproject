@@ -1,24 +1,6 @@
-# check_bus
-
-簡易查詢公車動態的程式
-主要是使用 node.js 以及 request 套件，並利用 JavaScript method 做網路爬蟲。
-
-# restaurant_WebDesign
-
-HTML JS CSS 綜合練習，主要是對 html 的熟悉、CSS 排版、DOM 操作以展現互動效果，外觀讚讚的餐廳網站。
-
-# simple_Form
-
-HTML JS CSS 的綜合練習，主要是 JS 對 DOM 的操控以及對表單的驗證。
-
-# todoList
-HTMl JS CSS 的綜合練習，做出外觀功能都不錯的 todo list。
-
-# password_generator
-產生隨機密碼給使用者，使用者可以勾選是否要包含數字還是英文還是特殊符號。
-
-# gameStream
-串接 Twitch API 來產生動態的網頁
-
-# blog 
-> 此blog作品是 Huli - Lidemy 5th 計畫的作業
+這邊主要是放
+- ### Lidemy 程式導師實驗計畫第五期 的作業實作
+- ### 滑 Youtube 滑到開編輯器來跟著做的小小專案
+- 
+雖然真的很懶得打字，主要是想記錄一下自己寫過些什麼小小專案，但更重要的是因為生性懶惰，不想打字，
+有點扮強迫自己可以寫每個小小作品的心得，讓自己能夠有逐日進步的成就感！🤭
