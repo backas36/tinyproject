@@ -22,10 +22,175 @@
       width: 40px;
       height: 40px;
     }
+
+    .fas {
+      pointer-events: none;
+    }
   </style>
   <script>
 
+    $(document).ready(() => {
+      const todosDOM = $('.list-group')
+      let todosAction = $('input[name=todosAction]:checked').val()
+      let todos = []
+      const url = new URL(window.location)
+      const params = url.searchParams
+      let todosId = params.get('todosId')
+
+      const createTodoArr = (todo) => {
+        todos.push({
+          content: todo,
+          isCompleted: false,
+          todoId: Date.now().toString()
+        })
+      }
+
+      const escapeHtml = (unsafe) => {
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      const renderTodos = (todos, todosAction = 'allList') => {
+        todosDOM.empty()
+        if (todosAction === 'incompletedList') {
+          const completedList = todos.filter(todo => !todo.isCompleted)
+          completedList.forEach(todo => {
+            if (!todo.isDeleted) {
+              const todoTemplate = `<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
+            <div class="w-100 fs-5">
+              <span class="todo-content " data-todo-id=${todo.todoId}>${todo.content}</span>
+            </div>
+            <div class="flex-shrink-1 d-flex">
+              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i class="fas fa-check"></i></button>
+              <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i class="fas fa-times text-white"></i></button>
+            </div>
+          </li>`
+              todosDOM.append(todoTemplate)
+            }
+          })
+          return
+        }
+        if (todosAction === 'completedList') {
+          const completedList = todos.filter(todo => todo.isCompleted)
+          completedList.forEach(todo => {
+            if (!todo.isDeleted) {
+              const todoTemplate = `<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
+            <div class="w-100 fs-5">
+              <span class="todo-content text-decoration-line-through " data-todo-id=${todo.todoId}>${todo.content}</span>
+            </div>
+            <div class="flex-shrink-1 d-flex">
+              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i class="fas fa-check"></i></button>
+              <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i class="fas fa-times text-white"></i></button>
+            </div>
+          </li>`
+              todosDOM.append(todoTemplate)
+            }
+          })
+          return
+        }
+        todos.forEach(todo => {
+          let checkCompleted = todo.isCompleted
+          const todoTemplate = `<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
+            <div class="w-100 fs-5">
+              <span class="todo-content ${checkCompleted ? 'text-decoration-line-through' : ''}" data-todo-id=${todo.todoId}>${todo.content}</span>
+            </div>
+            <div class="flex-shrink-1 d-flex">
+              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i class="fas fa-check"></i></button>
+              <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i class="fas fa-times text-white"></i></button>
+            </div>
+          </li>`
+          todosDOM.append(todoTemplate)
+        })
+      }
+
+      const deleteList = (todoSelectedIndex) => {
+        todos.splice(todoSelectedIndex, 1)
+        renderTodos(todos, todosAction)
+      }
+
+      // getTodos from Server
+      if (todosId) {
+        $.getJSON(`http://localhost:8888/todoListV2/get_todos.php?todosId=${todosId}`, (response) => {
+          todos = JSON.parse(response.data.todos)
+          renderTodos(todos, todosAction)
+        }
+        )
+      }
+
+      //save todos to Server
+      $('.btn-save').on('click', e => {
+        let todosJson = JSON.stringify(todos)
+        $.ajax({
+          type: 'POST',
+          url: `http://localhost:8888/todoListV2/add_todos.php`,
+          data: { todos: todosJson },
+          success: function (response) {
+            if (!response.ok) {
+              alert('something wrong in server ...')
+            }
+            todosId = response.id
+            //console.log(todosId)
+            window.location = `index.html?todosId=${todosId}`
+
+          },
+          error: function (error) {
+            alert(error)
+          }
+        })
+      })
+
+      // Add new todo to DOM 
+      $('#button-addNewTodo').on('click', (e) => {
+        e.preventDefault()
+        let newTodo
+        if ($('#input-newTodo').val() === '' || $('#input-newTodo').val() === null) {
+          alert('Please input todo task.')
+          return
+        } else {
+          newTodo = escapeHtml($('#input-newTodo').val())
+        }
+        createTodoArr(newTodo)
+        renderTodos(todos)
+
+        $('#input-newTodo').val('')
+      })
+
+      // action button
+      todosDOM.on('click', 'button', (e) => {
+        const todoAction = $(e.target)
+        const todoLi = todoAction.parent().parent()
+        const todoContentDOM = $(todoLi.children()[0]).children()
+        const todoSelectedIndex = todos.findIndex(todo => todo.todoId === String(todoContentDOM.data('todo-id')))
+        if (todoAction.hasClass('btn-deleted')) {
+          deleteList(todoSelectedIndex)
+        }
+        if (todoAction.hasClass('btn-completed')) {
+          if (todos[todoSelectedIndex].isCompleted) {
+            todos[todoSelectedIndex].isCompleted = false
+          } else {
+            todos[todoSelectedIndex].isCompleted = true
+          }
+          renderTodos(todos, todosAction)
+
+        }
+      })
+
+      // todos Action
+      $('.form-check-input').change((e) => {
+        todosAction = e.target.value
+        renderTodos(todos, todosAction)
+
+      })
+
+    })
+
+
   </script>
+
 </head>
 
 
@@ -40,53 +205,58 @@
 
     <div class="card border-secondary mb-3 shadow">
       <div class="col p-4 card-header">
-        <div class="input-group ">
+        <form class="input-group ">
           <input type="text" class="form-control fs-5" placeholder="Add Todo task here." aria-label="Add Todo task"
-            aria-describedby="button-addon2">
-          <button class="btn btn-outline-secondary fs-5" type="button" id="button-addon2">新增</button>
-        </div>
+            aria-describedby="button-addTodo" id="input-newTodo">
+          <button class="btn btn-outline-secondary fs-5" type="submit" id="button-addNewTodo">新增</button>
+        </form>
       </div>
-      <div class="col-12 px-4 py-4 d-md-flex justify-content-around">
+      <div class="col-12 px-4 py-4 d-md-flex justify-content-around ">
         <div class="form-check ">
-          <input class="form-check-input" type="radio" name="listOption" id="allList" value="allList">
+          <input class="form-check-input" type="radio" name="todosAction" id="allList" value="allList" checked>
           <label class="form-check-label" for="allList">Show All </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="listOption" id="completedList" value="completedList">
+          <input class="form-check-input" type="radio" name="todosAction" id="completedList" value="completedList">
           <label class="form-check-label" for="completedList">Show Completed Tasks</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="listOption" id="incompletedList" value="incompletedList">
+          <input class="form-check-input" type="radio" name="todosAction" id="incompletedList" value="incompletedList">
           <label class="form-check-label" for="incompletedList">Show Incompleted Tasks</label>
         </div>
       </div>
 
       <div class="col pb-4 pt-0 card-body text-primary ">
         <ul class="list-group">
-          <li class="d-flex justify-content-start align-items-center px-2 list-group-item">
+          <!--<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
             <div class="w-100 fs-5">
-              <span class="">First checkbox lorem20First checkbox lorem20First checkbox lorem20First checkbox
-                lorem20First checkbox lorem20</span>
+              <span class="text-decoration-line-through todo-content">First checkbox lorem20</span>
             </div>
             <div class="flex-shrink-1 d-flex">
-              <button type=" button" class="custom ms-2 btn btn-primary"><i class="fas fa-check"></i></button>
-              <button type="button" class="custom ms-1 btn btn-danger"><i class="fas fa-times text-white"></i></button>
+              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i
+                  class="fas fa-check"></i></button>
+              <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i
+                  class="fas fa-times text-white"></i></button>
             </div>
-          </li>
-          <li class="d-flex justify-content-start align-items-center px-2 list-group-item">
-            <div class="w-100 fs-5">
-              <span class="text-decoration-line-through">First checkbox lorem20</span>
-            </div>
-            <div class="flex-shrink-1 d-flex">
-              <button type=" button" class="custom ms-2 btn btn-primary"><i class="fas fa-check"></i></button>
-              <button type="button" class="custom ms-1 btn btn-danger"><i class="fas fa-times text-white"></i></button>
-            </div>
-          </li>
+          </li>-->
         </ul>
       </div>
-
+      <div class="mx-auto mb-3">
+        <a class="btn btn-outline-primary me-md-2 btn-save" type="button">Save</a>
+      </div>
     </div>
 
 </body>
 
 </html>
+
+
+<!-- todo的 i 該怎麼解決呢 pointer-events: none; -->
+<!-- remove empty detach https://codertw.com/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC/268357/ -->
+<!-- 選了 show Completed Tasks 之後，再去 add todo 會沒辦法保持狀態 -->
+<!-- URL.serachParams 
+https://pjchender.blogspot.com/2018/08/js-javascript-url-parameters.html-->
+
+<!-- 超方便的 jquery getJSON -->
+
+<!-- 在php每次都忘記轉換 todosId 為數字 -->
