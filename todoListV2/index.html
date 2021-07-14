@@ -30,16 +30,17 @@
   <script>
 
     $(document).ready(() => {
+
       const todosDOM = $('.list-group')
-      let todosAction = $('input[name=todosAction]:checked').val()
-      let todos = []
       const url = new URL(window.location)
       const params = url.searchParams
       let todosId = params.get('todosId')
+      let todosAction = $('input[name=todosAction]:checked').val()
+      let todos = []
 
-      const createTodoArr = (todo) => {
+      const createTodoArr = (newTodoContent) => {
         todos.push({
-          content: todo,
+          content: newTodoContent,
           isCompleted: false,
           todoId: Date.now().toString()
         })
@@ -54,62 +55,53 @@
           .replace(/'/g, "&#039;");
       }
 
-      const renderTodos = (todos, todosAction = 'allList') => {
+      const makeTodoTemplate = (todo) => {
+
+        return `<li class="d-flex flex-column flex-sm-row justify-content-start align-items-center px-2 list-group-item">
+          <div class="w-100 fs-5 ">
+             <input type="text" class="form-control d-none my-2" aria-describedby="todo list content" />
+            <span class="text-break ${todo.isCompleted ? 'text-decoration-line-through' : ''}"
+              data-todo-id="${todo.todoId}">${todo.content}</span>
+          </div>
+          <div class="flex-shrink-1 d-flex align-self-start align-self-md-center">
+            <button type=" button" class="custom ms-0 ms-md-2 btn btn-success btn-edit"><i
+              class="fas fa-pen"></i></button>
+            <button type=" button" class="custom ms-1 btn btn-primary btn-completed"><i
+              class="fas fa-check"></i></button>
+            <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i
+              class="fas fa-times text-white"></i></button>
+          </div>
+        </li>`
+      }
+
+      const renderTodos = (todos, todosAction) => {
         todosDOM.empty()
         if (todosAction === 'incompletedList') {
-          const completedList = todos.filter(todo => !todo.isCompleted)
-          completedList.forEach(todo => {
-            if (!todo.isDeleted) {
-              const todoTemplate = `<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
-            <div class="w-100 fs-5">
-              <span class="todo-content " data-todo-id=${todo.todoId}>${todo.content}</span>
-            </div>
-            <div class="flex-shrink-1 d-flex">
-              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i class="fas fa-check"></i></button>
-              <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i class="fas fa-times text-white"></i></button>
-            </div>
-          </li>`
-              todosDOM.append(todoTemplate)
-            }
-          })
-          return
+          todos = todos.filter(todo => !todo.isCompleted)
         }
+
         if (todosAction === 'completedList') {
-          const completedList = todos.filter(todo => todo.isCompleted)
-          completedList.forEach(todo => {
-            if (!todo.isDeleted) {
-              const todoTemplate = `<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
-            <div class="w-100 fs-5">
-              <span class="todo-content text-decoration-line-through " data-todo-id=${todo.todoId}>${todo.content}</span>
-            </div>
-            <div class="flex-shrink-1 d-flex">
-              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i class="fas fa-check"></i></button>
-              <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i class="fas fa-times text-white"></i></button>
-            </div>
-          </li>`
-              todosDOM.append(todoTemplate)
-            }
-          })
-          return
+          todos = todos.filter(todo => todo.isCompleted)
         }
+
         todos.forEach(todo => {
-          let checkCompleted = todo.isCompleted
-          const todoTemplate = `<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
-            <div class="w-100 fs-5">
-              <span class="todo-content ${checkCompleted ? 'text-decoration-line-through' : ''}" data-todo-id=${todo.todoId}>${todo.content}</span>
-            </div>
-            <div class="flex-shrink-1 d-flex">
-              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i class="fas fa-check"></i></button>
-              <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i class="fas fa-times text-white"></i></button>
-            </div>
-          </li>`
+          let todoTemplate = makeTodoTemplate(todo)
           todosDOM.append(todoTemplate)
         })
       }
 
-      const deleteList = (todoSelectedIndex) => {
-        todos.splice(todoSelectedIndex, 1)
-        renderTodos(todos, todosAction)
+      const deleteList = (todoSelectedIndexArr) => {
+        let result = todos
+        for (let i = 0; i < todoSelectedIndexArr.length; i++) {
+          result = result.map(todo => {
+            if (todos.indexOf(todo) !== todoSelectedIndexArr[i]) {
+              return todo
+            }
+          })
+        }
+        todos = result.filter(todo => todo !== undefined)
+        return todos
+        // 刪除不連續陣列這邊搞好久，之後有時間要多練習這邊！
       }
 
       // getTodos from Server
@@ -119,6 +111,9 @@
           renderTodos(todos, todosAction)
         }
         )
+      } else {
+        renderTodos(todos, todosAction)
+        //測試用記得刪掉
       }
 
       //save todos to Server
@@ -133,9 +128,7 @@
               alert('something wrong in server ...')
             }
             todosId = response.id
-            //console.log(todosId)
             window.location = `index.html?todosId=${todosId}`
-
           },
           error: function (error) {
             alert(error)
@@ -145,28 +138,37 @@
 
       // Add new todo to DOM 
       $('#button-addNewTodo').on('click', (e) => {
+
         e.preventDefault()
         let newTodo
         if ($('#input-newTodo').val() === '' || $('#input-newTodo').val() === null) {
           alert('Please input todo task.')
           return
         } else {
-          newTodo = escapeHtml($('#input-newTodo').val())
+          newTodoContent = escapeHtml($('#input-newTodo').val())
         }
-        createTodoArr(newTodo)
-        renderTodos(todos)
+
+        createTodoArr(newTodoContent)
+
+        $('.form-check-input')[0].checked = true
+        todosAction = $('input[name=todosAction]:checked').val()
+
+        renderTodos(todos, todosAction)
 
         $('#input-newTodo').val('')
       })
 
-      // action button
+      //todo action button
       todosDOM.on('click', 'button', (e) => {
         const todoAction = $(e.target)
         const todoLi = todoAction.parent().parent()
-        const todoContentDOM = $(todoLi.children()[0]).children()
-        const todoSelectedIndex = todos.findIndex(todo => todo.todoId === String(todoContentDOM.data('todo-id')))
+        const todoContentDOM = $(todoLi.children()[0])
+        const todoContentSpan = $(todoContentDOM.children()[1])
+
+        const todoSelectedIndex = todos.findIndex(todo => todo.todoId === String(todoContentSpan.data('todo-id')))
         if (todoAction.hasClass('btn-deleted')) {
-          deleteList(todoSelectedIndex)
+          todos = deleteList([todoSelectedIndex])
+          renderTodos(todos, todosAction)
         }
         if (todoAction.hasClass('btn-completed')) {
           if (todos[todoSelectedIndex].isCompleted) {
@@ -175,20 +177,53 @@
             todos[todoSelectedIndex].isCompleted = true
           }
           renderTodos(todos, todosAction)
+        }
+
+        if (todoAction.hasClass('btn-edit')) {
+          const todoContentInput = $(todoContentDOM.children()[0])
+          todoContentInput.val(todos[todoSelectedIndex].content)
+
+          todoContentInput.toggleClass('d-none')
+          todoContentSpan.toggleClass('d-none')
+          todoContentInput.focus()
+          todoContentInput.change(e => {
+            let newTodoValue = e.target.value
+            todos[todoSelectedIndex].content = newTodoValue
+            renderTodos(todos, todosAction)
+          })
 
         }
       })
 
       // todos Action
       $('.form-check-input').change((e) => {
-        todosAction = e.target.value
-        renderTodos(todos, todosAction)
+        todosAction = $('input[name=todosAction]:checked').val()
 
+        renderTodos(todos, todosAction)
+      })
+
+      // clean all todo
+      $('.btn-clean').on('click', (e) => {
+        todos = []
+        renderTodos(todos, todosAction)
+      })
+
+      // clean completed todo
+      $('.btn-clean-completed').on('click', (e) => {
+        let completedArr = todos.map(todo => todo.isCompleted)
+        let completedIndexArr = []
+        let fromIndex = 0
+        while (fromIndex < todos.length) {
+          fromIndex = completedArr.indexOf(true, fromIndex)
+          if (fromIndex === -1) break
+          completedIndexArr.push(fromIndex)
+          fromIndex = fromIndex + 1
+        }
+        deleteList(completedIndexArr)
+        renderTodos(todos, todosAction)
       })
 
     })
-
-
   </script>
 
 </head>
@@ -200,14 +235,12 @@
       <span class="navbar-brand mb-0 h1">Tolist v2</span>
     </nav>
   </header>
-
-  <main class="container mt-5 px-3">
-
+  <main class="container nt-5 px-3">
     <div class="card border-secondary mb-3 shadow">
       <div class="col p-4 card-header">
         <form class="input-group ">
           <input type="text" class="form-control fs-5" placeholder="Add Todo task here." aria-label="Add Todo task"
-            aria-describedby="button-addTodo" id="input-newTodo">
+            aria-describedby="button-addTodo" id="input-newTodo" autofocus>
           <button class="btn btn-outline-secondary fs-5" type="submit" id="button-addNewTodo">新增</button>
         </form>
       </div>
@@ -228,12 +261,16 @@
 
       <div class="col pb-4 pt-0 card-body text-primary ">
         <ul class="list-group">
-          <!--<li class="d-flex justify-content-start align-items-center px-2 list-group-item">
+          <!--<li class="d-flex flex-column flex-md-row justify-content-start align-items-center px-2 list-group-item">
             <div class="w-100 fs-5">
-              <span class="text-decoration-line-through todo-content">First checkbox lorem20</span>
+              <input type="text" class="form-control d-none my-2" aria-describedby="todo list content">
+              <span class="text-break"
+                data-todo-id="1626260196705">dagsaglgm;lkagl;rekg;redagsaglgm;lkagl;rekg;redagsaglgm;lkagl;rekg;redagsaglgm;lkagl;rekg;redagsaglgm;lkagl;rekg;redagsaglgm;lkagl;rekg;redagsaglgm;lkagl;rekg;redagsaglgm;lkagl;rekg;re</span>
             </div>
-            <div class="flex-shrink-1 d-flex">
-              <button type=" button" class="custom ms-2 btn btn-primary btn-completed"><i
+            <div class="flex-shrink-1 d-flex align-self-start align-self-md-center">
+              <button type=" button" class="custom ms-0 ms-md-2 btn btn-success btn-edit"><i
+                  class="fas fa-pen"></i></button>
+              <button type=" button" class="custom ms-1 btn btn-primary btn-completed"><i
                   class="fas fa-check"></i></button>
               <button type="button" class="custom ms-1 btn btn-danger btn-deleted"><i
                   class="fas fa-times text-white"></i></button>
@@ -242,9 +279,13 @@
         </ul>
       </div>
       <div class="mx-auto mb-3">
-        <a class="btn btn-outline-primary me-md-2 btn-save" type="button">Save</a>
+        <a class="btn btn-outline-primary me-5 btn-save" type="button">Save</a>
+        <button class="btn btn-outline-primary me-1 btn-clean" type="button">清除所有</button>
+        <button class="btn btn-outline-primary me-1 btn-clean-completed" type="button">清除已完成</button>
       </div>
     </div>
+  </main>
+
 
 </body>
 
@@ -260,3 +301,7 @@ https://pjchender.blogspot.com/2018/08/js-javascript-url-parameters.html-->
 <!-- 超方便的 jquery getJSON -->
 
 <!-- 在php每次都忘記轉換 todosId 為數字 -->
+
+<!-- 原本狀態點在 Show Completed Tasks 下，然後再去新增 todo task後，狀態還是顯示 show completed tasks ，但是底下的 task 是 show all，所以去查了一下怎麼設定 radio checked，邏輯部分一開始有點打結，後來打開了，就是要從新增todo的那個區塊去重新設定哪個 radio 要 checked ，並帶入 render function -->
+
+<!-- 清除已完成功能的困難，查了一下怎麼找出所有 isCompleted 的 index ，之後更是卡關，因為要用 splice 刪除不連續的 todo-->
