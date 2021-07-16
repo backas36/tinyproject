@@ -20,7 +20,7 @@ body {
 .form__desc {
   margin-top: 35px;
   font-size: 14px;
-  line-height: 2em ;
+  line-height: 2em;
 }
 
 .form__notice {
@@ -30,7 +30,7 @@ body {
 }
 
 .form__block-required .form__block__title::after {
-  content: '*';
+  content: "*";
   color: #e74149;
   margin-left: 8px;
 }
@@ -63,9 +63,9 @@ body {
   margin-top: 12px;
 }
 
-.input__empty{
+.input__empty {
   margin-top: 5px;
-  color:#e74149;
+  color: #e74149;
   visibility: hidden;
 }
 
