@@ -7,6 +7,7 @@ module.exports = {
   output: {
     filename: 'main.js', //輸出檔案的名稱 
     path: path.resolve(__dirname, 'dist'), // 現在資料夾底下的 dist
+    library: "commentPlugin",
   },
   devtool: 'inline-source-map',
   devServer: {

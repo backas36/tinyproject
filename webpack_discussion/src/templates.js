@@ -1,14 +1,18 @@
+export const getLoadMoreButton = (className) => {
+  return `<button type="button" class="${className} btn btn-primary">Load more</button>`
+}
 
- export const formTemplate = `
+export const getFormHTML = (className, commentsClassName) => {
+  return `
     <div class="row ">
-      <form class="add__comment__form">
+      <form class="${className}">
         <div class="mb-3 mt-3">
-          <label for="nickname" class="form-label">暱稱</label>
-          <input type="text" class="form-control" id="nickname" name="nickname">
+          <label class="form-label">暱稱</label>
+          <input type="text" class="form-control"  name="nickname">
         </div>
         <div class="mb-3">
-          <label for="comment__content" class="form-label">留言內容</label>
-          <textarea class="form-control" id="comment__content" rows="5" name="content"></textarea>
+          <label class="form-label">留言內容</label>
+          <textarea class="form-control" rows="5" name="content"></textarea>
         </div>
         <div class="mb-3">
           <button type="submit" class="btn btn-primary mb-3">送出</button>
@@ -16,8 +20,9 @@
       </form>
     </div>
 
-    <div class="row comments">
+    <div class="row ${commentsClassName}">
     </div>
     <div class="row d-grid gap-2 col-4 mx-auto load__field">
       </div>
   `
+}

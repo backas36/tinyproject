@@ -8,6 +8,7 @@ const escapeOutput = (toOutput) => {
 }
 
 export const appendCommentToDOM = (targetDOM, comment) => {
+
   const html = `
     <div class="card comment mb-3">
       <div class="card-body">

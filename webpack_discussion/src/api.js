@@ -2,12 +2,12 @@ import $ from 'jquery'
 
 export const getComments = (requestData, callback) => {
   const url = `${requestData.apiUrl}api_comments.php?site_key=${requestData.site_key}&before=${requestData.before}`
+
   $.ajax({
     type: 'GET',
     url,
     success: function (response) {
       if (!response.ok) {
-        console.log(response.message)
         callback(response.message)
         return
       }

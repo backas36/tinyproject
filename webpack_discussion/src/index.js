@@ -1,10 +1,17 @@
 import {getComments, addComments} from './api'
 import {appendCommentToDOM} from './utils'
-import {formTemplate} from './templates'
+import {getFormHTML, getLoadMoreButton} from './templates'
 import $ from 'jquery'
 
 
 let commentsDOM = null
+let loadMoreClassName
+let commentsClassName
+let commentsSelector
+let formClassName
+let formSelector
+
+
 const requestData = {
   site_key: '',
   before: 0,
@@ -14,22 +21,33 @@ const requestData = {
   containerSelector: null
 }
 
-$(document).ready(() => {
-  requestData.site_key = 'ashi'
-  requestData.apiUrl = 'http://localhost:8888/webpack_discussion/'
-  requestData.containerSelector = '.comments-area'
-  init(requestData)
-})
 
-const init = (requestData) => {
+export const init = (requestCustomData) => {
+  requestData.site_key = requestCustomData.site_key
+  requestData.apiUrl = requestCustomData.apiUrl
+  requestData.containerSelector = requestCustomData.containerSelector
+
+  
+
+  formClassName = `${requestData.site_key}-add__comment__form`
+  formSelector = '.' + formClassName
+
+  commentsClassName = `${requestData.site_key}-comments`
+  commentsSelector = '.' + commentsClassName
+
+  loadMoreClassName = `${requestData.site_key}-load__btn`
+ 
+
 
   const containerElement = $(requestData.containerSelector)
-  containerElement.append(formTemplate)
-  commentsDOM = $('.comments')
+  containerElement.append(getFormHTML(formClassName,commentsClassName))
+
+  
+  commentsDOM = $(commentsSelector)
 
   getNewComments(requestData)
 
-  $('.load__field').on('click', $('.load__btn'), () => {
+  $('.load__field').on('click', $(`.${loadMoreClassName}`), () => {
     getNewComments(requestData)
   })
 
@@ -48,21 +66,23 @@ const init = (requestData) => {
       requestData.isEnd = false
       getNewComments(requestData)
 
-      $('input[name=nickname]').val('')
-      $('textarea[name=content]').val('')
+      
     })
   }
 
-  $('.add__comment__form').on('submit', (event) => {
+  $(formSelector).on('submit', (event) => {
     event.preventDefault()
+    const nicknameDOM =  $(`${formSelector} input[name=nickname]`)
+    const cotentDOM = $(`${formSelector} textarea[name=content]`)
     const newCommentData = {
       site_key:requestData.site_key, 
-      nickname: $('input[name=nickname]').val(),
-      content: $('textarea[name=content]').val()
+      nickname: nicknameDOM.val(),
+      content: cotentDOM.val()
     }
     addCommentCb(requestData, newCommentData)
 
-
+    nicknameDOM.val('')
+    cotentDOM.val('')
   })
 }
 
@@ -79,19 +99,21 @@ const getNewComments = (requestData) => {
       alert(error)
       return
     }
+
     const comments = response.discussions
     const commentsLength = comments.length
-    comments.forEach(comment => [
+
+    comments.forEach(comment => {
       appendCommentToDOM(commentsDOM, comment)
-    ])
+    })
     if (commentsLength === 0) {
       requestData.isEnd = true
       return
     } else {
       requestData.lastId = comments[comments.length - 1].id
       requestData.before = requestData.lastId
-
-      $('.load__field').html(`<button type="button" class="btn btn-primary load__btn">Load more</button>`)
+      const loadMoreButtomHTML = getLoadMoreButton(loadMoreClassName)
+      $('.load__field').html(loadMoreButtomHTML)
     }
   })
 }
