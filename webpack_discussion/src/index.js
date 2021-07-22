@@ -13,6 +13,8 @@ export const init = (requestCustomData) => {
   let commentsSelector
   let formClassName
   let formSelector
+  let loadFieldClassName
+  let loadFieldSelector
 
 
   const requestData = {
@@ -38,17 +40,18 @@ export const init = (requestCustomData) => {
 
   loadMoreClassName = `${requestData.site_key}-load__btn`
  
-
+  loadFieldClassName = `${requestData.site_key}-load__field`
+  loadFieldSelector = '.' + loadFieldClassName
 
   const containerElement = $(requestData.containerSelector)
-  containerElement.append(getFormHTML(formClassName,commentsClassName))
+  containerElement.append(getFormHTML(formClassName,commentsClassName, loadFieldClassName))
 
   
   commentsDOM = $(commentsSelector)
 
 
   const getNewComments = (requestData) => {
-    $('.load__field').empty()
+    $(loadFieldSelector).empty()
 
     if (requestData.isEnd) {
       return
@@ -72,14 +75,14 @@ export const init = (requestCustomData) => {
         requestData.lastId = comments[comments.length - 1].id
         requestData.before = requestData.lastId
         const loadMoreButtomHTML = getLoadMoreButton(loadMoreClassName)
-        $('.load__field').html(loadMoreButtomHTML)
+        $(loadFieldSelector).html(loadMoreButtomHTML)
       }
     })
   }
 
   getNewComments(requestData)
 
-  $('.load__field').on('click', $(`.${loadMoreClassName}`), () => {
+  $(loadFieldSelector).on('click', $(`.${loadMoreClassName}`), () => {
     getNewComments(requestData)
   })
 

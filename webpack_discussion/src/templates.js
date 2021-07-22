@@ -2,7 +2,7 @@ export const getLoadMoreButton = (className) => {
   return `<button type="button" class="${className} btn btn-primary">Load more</button>`
 }
 
-export const getFormHTML = (className, commentsClassName) => {
+export const getFormHTML = (className, commentsClassName, loadFieldClassName) => {
   return `
     <div class="row ">
       <form class="${className}">
@@ -22,7 +22,7 @@ export const getFormHTML = (className, commentsClassName) => {
 
     <div class="row ${commentsClassName}">
     </div>
-    <div class="row d-grid gap-2 col-4 mx-auto load__field">
+    <div class="row d-grid gap-2 col-4 mx-auto ${loadFieldClassName}">
       </div>
   `
 }
