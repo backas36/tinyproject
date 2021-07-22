@@ -4,25 +4,26 @@ import {getFormHTML, getLoadMoreButton} from './templates'
 import $ from 'jquery'
 
 
-let commentsDOM = null
-let loadMoreClassName
-let commentsClassName
-let commentsSelector
-let formClassName
-let formSelector
-
-
-const requestData = {
-  site_key: '',
-  before: 0,
-  lastId: null,
-  isEnd: false,
-  apiUrl: '',
-  containerSelector: null
-}
 
 
 export const init = (requestCustomData) => {
+  let commentsDOM = null
+  let loadMoreClassName
+  let commentsClassName
+  let commentsSelector
+  let formClassName
+  let formSelector
+
+
+  const requestData = {
+    site_key: '',
+    before: 0,
+    lastId: null,
+    isEnd: false,
+    apiUrl: '',
+    containerSelector: null
+  }
+
   requestData.site_key = requestCustomData.site_key
   requestData.apiUrl = requestCustomData.apiUrl
   requestData.containerSelector = requestCustomData.containerSelector
@@ -44,6 +45,37 @@ export const init = (requestCustomData) => {
 
   
   commentsDOM = $(commentsSelector)
+
+
+  const getNewComments = (requestData) => {
+    $('.load__field').empty()
+
+    if (requestData.isEnd) {
+      return
+    }
+    getComments(requestData, (error, response) => {
+      if (error) {
+        alert(error)
+        return
+      }
+
+      const comments = response.discussions
+      const commentsLength = comments.length
+
+      comments.forEach(comment => {
+        appendCommentToDOM(commentsDOM, comment)
+      })
+      if (commentsLength === 0) {
+        requestData.isEnd = true
+        return
+      } else {
+        requestData.lastId = comments[comments.length - 1].id
+        requestData.before = requestData.lastId
+        const loadMoreButtomHTML = getLoadMoreButton(loadMoreClassName)
+        $('.load__field').html(loadMoreButtomHTML)
+      }
+    })
+  }
 
   getNewComments(requestData)
 
@@ -88,32 +120,3 @@ export const init = (requestCustomData) => {
 
 
 
-const getNewComments = (requestData) => {
-  $('.load__field').empty()
-
-  if (requestData.isEnd) {
-    return
-  }
-  getComments(requestData, (error, response) => {
-    if (error) {
-      alert(error)
-      return
-    }
-
-    const comments = response.discussions
-    const commentsLength = comments.length
-
-    comments.forEach(comment => {
-      appendCommentToDOM(commentsDOM, comment)
-    })
-    if (commentsLength === 0) {
-      requestData.isEnd = true
-      return
-    } else {
-      requestData.lastId = comments[comments.length - 1].id
-      requestData.before = requestData.lastId
-      const loadMoreButtomHTML = getLoadMoreButton(loadMoreClassName)
-      $('.load__field').html(loadMoreButtomHTML)
-    }
-  })
-}
