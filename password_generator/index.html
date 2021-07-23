@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>密碼產生器</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background: #FEF9EF;
+    }
+
+    .container {
+      max-width: 600px;
+      border: 5px solid #227C9D;
+      margin: 30px auto;
+      padding: 24px 12px;
+      border-radius: 10px;
+      font-size: 24px;
+      box-shadow: 2px 2px 8px rgba(6, 41, 72, 0.4);
+      text-align: center;
+    }
+
+    .app__option {
+      margin-top: 12px;
+    }
+
+    .app__option input[type="checkbox"]+span {
+      padding: 4px 8px;
+      width: 30%;
+      text-align: center;
+      display: inline-block;
+      color: #227c9d;
+      border: 1px solid #227c9d;
+      box-shadow: 1px 1px 4px rgba(6, 41, 72, 0.4);
+      border-radius: 8px;
+      transition: .3s;
+      user-select: none;
+    }
+
+    .app__option label {
+      cursor: pointer;
+      background-color: transparent;
+      /*padding: 6px;*/
+    }
+
+    .app__option input[type="checkbox"] {
+      display: none;
+    }
+
+    .app__option input[type="checkbox"]:hover+span,
+    .app__option input[type="checkbox"]:checked+span {
+      background-color: #175d76;
+      color: #eee;
+    }
+
+    select {
+      background: transparent;
+      border: 1px solid #227c9d;
+      box-shadow: 1px 1px 4px rgba(6, 41, 72, 0.4);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 6px 0;
+      width: 30%;
+      font-size: 24px;
+      color: #227c9d;
+      padding-left: 74px;
+    }
+
+    select:focus {
+      outline: none;
+    }
+
+    .app__submit {
+      text-align: center;
+    }
+
+    .submit__btn {
+      margin-top: 24px;
+      font-size: 24px;
+      border: none;
+      padding: 6px 24px;
+      background-color: #227C9D;
+      color: #eee;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 80%;
+      transition: .3s;
+      opacity: .8;
+    }
+
+
+    .submit__btn:hover {
+      opacity: 1;
+    }
+
+    .app__result {
+      margin-top: 24px;
+      color: #FE6D73;
+      font-size: 30px;
+    }
+
+    .result-hide {
+      visibility: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="app">
+      <div class="app__option">
+        <label for="en">
+          <input type="checkbox" id="en" data-char="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+          <span>英文</span>
+        </label>
+      </div>
+      <div class="app__option">
+        <label for="digi">
+          <input type="checkbox" id="digi" data-char="0123456789" />
+          <span>數字</span>
+        </label>
+      </div>
+      <div class="app__option">
+        <label for="sp">
+          <input type="checkbox" id="sp" data-char="~!@#$%^&*()_+" />
+          <span>特殊符號</span>
+        </label>
+      </div>
+      <div class="app__option">
+        <select class="option__select">
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7" selected>7</option>
+          <option value="7">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+      <div class="app__submit">
+        <button class="submit__btn">產生密碼</button>
+      </div>
+    </div>
+    <div class="app__result">
+      <p class="result__detail result-hide">password</p>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.submit__btn').addEventListener('click', (e) => {
+      let availableChar = ''
+      let resultText = ''
+
+      const result = document.querySelector('.result__detail')
+      const passwordSize = +document.querySelector('.option__select').value
+
+      const checkboxes = Array.from(document.querySelectorAll('input'))
+      result.classList.remove('result-hide')
+      if (checkboxes.every(checkbox => checkbox.checked === false)) {
+        resultText = '請選擇密碼產生條件'
+      } else {
+        checkboxes.forEach(checkbox => {
+          if (checkbox.checked === true) {
+            availableChar += checkbox.dataset.char
+          }
+        })
+
+
+        for (let i = 0; i < passwordSize; i++) {
+          const charIndex = Math.floor(Math.random() * availableChar.length)
+          resultText += availableChar[charIndex]
+        }
+
+      }
+
+      result.textContent = resultText;
+
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "sideproject",
+  "version": "1.0.0",
+  "description": "簡易查詢公車動態的程式 主要是使用 node.js 以及 request 套件，並利用 JavaScript method 做網路爬蟲。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/backas36/sideproject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/backas36/sideproject/issues"
+  },
+  "homepage": "https://github.com/backas36/sideproject#readme"
+}
