@@ -1,0 +1,11 @@
+<h1>Pleas add todo</h1>
+<% if(isLogin) { %>
+  已經登入頁面 <a href="/logout">Logout</a>
+  <% }else{ %>
+    你還沒登入
+    <% } %>
+
+      <form action="/todos" method="POST">
+        Content: <input type="text" name="content" />
+        <input type="submit" />
+      </form>
