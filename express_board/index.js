@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 
 app.get('/login', userController.login)
 app.post('/login', userController.handleLogin)
-app.get('/logout', userController.handleLogout)
+app.get('/logout', userController.logout)
 
 
 
