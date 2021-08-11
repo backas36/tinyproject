@@ -30,7 +30,9 @@ app.use((req, res, next) => {
 app.post('/todos', todoController.newTodo)
 app.get('/todos', todoController.getAll)
 app.get('/todos/:todoId', todoController.get)
-app.get('/', todoController.addTodo)
+app.get('/', (req, res) => {
+  res.render('index')
+})
 
 app.get('/login', userController.login)
 app.post('/login', userController.handleLogin)
