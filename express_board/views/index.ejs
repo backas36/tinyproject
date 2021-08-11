@@ -2,6 +2,12 @@
 <% if(username) { %>
   Hello, <%= username %>
     <a href="/logout">Logout</a>
+
+    <form action="/comments" method="POST">
+      <textarea name="content" cols="30" rows="10"></textarea>
+      <input type="submit" />
+    </form>
+
     <% }else{ %>
       <a href="/register">註冊</a>
       <a href="/login"> 登入</a>
