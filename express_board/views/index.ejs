@@ -21,7 +21,9 @@
             <p>
               <%= comment.content%>
             </p>
-
+            <% if(username===comment.username) { %>
+              <a href="/delete_comments/<%= comment.id%>">刪除</a>
+              <%}%>
           </div>
 
           <% }) %>
