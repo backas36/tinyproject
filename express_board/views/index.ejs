@@ -1,7 +1,8 @@
 <h1>簡易會員系統</h1>
 <% if(username) { %>
-  <a href="/logout">Logout</a>
-  <% }else{ %>
-    <a href="/register">註冊</a>
-    <a href="/login"> 登入</a>
-    <% } %>
+  Hello, <%= username %>
+    <a href="/logout">Logout</a>
+    <% }else{ %>
+      <a href="/register">註冊</a>
+      <a href="/login"> 登入</a>
+      <% } %>
