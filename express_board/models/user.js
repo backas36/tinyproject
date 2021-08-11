@@ -11,13 +11,13 @@ const userModel = {
       }
     )
   },
-  add:(user, addTodoCb) => {
+  add:(user, cb) => {
     db.query(
       'INSERT INTO users (username, password, nickname) VALUES(?, ?, ?)', 
       [user.username, user.password, user.nickname],
       (error, result) => {
-        if(error) return addTodoCb(error)
-        addTodoCb(null, result)
+        if(error) return cb(error)
+        cb(null, result)
       }
     )
   }
