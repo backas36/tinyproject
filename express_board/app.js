@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const port = 8000
-const todoController = require('./controllers/todo')
 const userController = require('./controllers/user')
 const commentController = require('./controllers/comment')
 
@@ -36,11 +35,6 @@ app.get('/login', userController.login)
 app.post('/login', userController.handleLogin, redirectBack)
 
 app.get('/', commentController.index)
-
-app.post('/todos', todoController.newTodo)
-app.get('/todos', todoController.getAll)
-app.get('/todos/:todoId', todoController.get)
-
 
 
 app.get('/logout', userController.logout)
