@@ -11,6 +11,26 @@ const userController = {
     res.render('login')
   },
   handleLogin: (req,res) => {
+    const {username, password} = req.body
+    if( !username || !password){
+      return req.flash('errorMessage', '該填的沒填唷！')
+    }
+
+    userModel.get(username, (error, user) => {
+      if(error) {       
+        return req.flash('errorMessage', error.toString())
+      }
+
+      bcrypt.compare(password, user.password, function(error, result) {
+        if(error) {        
+          return req.flash('errorMessage', '密碼錯誤')
+        }
+        req.session.username = user.username
+        res.redirect('/')
+      });
+    })
+
+
     if(req.body.password === 'abc') {
       req.session.username = true
       res.redirect('/')
