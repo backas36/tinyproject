@@ -1,30 +1,42 @@
-<h1>簡易會員系統</h1>
-<% if(username) { %>
-  Hello, <%= username %>
-    <a href="/logout">Logout</a>
+<!DOCTYPE html>
+<html>
 
+<head>
+  <%- include ('template/head')%>
+</head>
+
+<body>
+
+</body>
+
+</html>
+
+<%- include ('template/navbar')%>
+
+
+
+
+
+  <h1>簡易會員系統</h1>
+  <% if(username) { %>
     <form action="/comments" method="POST">
       <textarea name="content" cols="30" rows="10"></textarea>
       <input type="submit" />
     </form>
+    <% } %>
 
-    <% }else{ %>
-      <a href="/register">註冊</a>
-      <a href="/login"> 登入</a>
-      <% } %>
+      <% comments.forEach(comment=> { %>
+        <div>
+          <h2>
+            <%= comment.nickname%>
+          </h2>
+          <p>
+            <%= comment.content%>
+          </p>
+          <% if(username===comment.username) { %>
+            <a href="/update_comments/<%= comment.id%>">編輯</a>
+            <a href="/delete_comments/<%= comment.id%>">刪除</a>
+            <%}%>
+        </div>
 
-        <% comments.forEach(comment=> { %>
-          <div>
-            <h2>
-              <%= comment.nickname%>
-            </h2>
-            <p>
-              <%= comment.content%>
-            </p>
-            <% if(username===comment.username) { %>
-              <a href="/update_comments/<%= comment.id%>">編輯</a>
-              <a href="/delete_comments/<%= comment.id%>">刪除</a>
-              <%}%>
-          </div>
-
-          <% }) %>
+        <% }) %>
