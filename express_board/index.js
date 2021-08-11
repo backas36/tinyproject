@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 8000
 const todoController = require('./controllers/todo')
+const userController = require('./controllers/user')
+
 const db = require('./db')
 const session = require('express-session')
 const flash = require('connect-flash')
@@ -30,22 +32,9 @@ app.get('/todos', todoController.getAll)
 app.get('/todos/:todoId', todoController.get)
 app.get('/', todoController.addTodo)
 
-app.get('/login', (req, res) => {
-  res.render('login')
-})
-app.post('/login', (req,res) => {
-   if(req.body.password === 'abc') {
-    req.session.isLogin = true
-    res.redirect('/')
-  } else {
-    req.flash('errorMessage', 'Please input the correct password.')
-    res.redirect('/login')
-  }
-})
-app.get('/logout', (req, res)=>{
-  req.session.isLogin = false
-  res.redirect('/')
-})
+app.get('/login', userController.login)
+app.post('/login', userController.handleLogin)
+app.get('/logout', userController.handleLogout)
 
 
 
