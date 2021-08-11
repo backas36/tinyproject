@@ -10,34 +10,33 @@ const userController = {
   login:(req, res) => {
     res.render('login')
   },
-  handleLogin: (req,res) => {
+  handleLogin: (req,res, next) => {
     const {username, password} = req.body
     if( !username || !password){
-      return req.flash('errorMessage', '該填的沒填唷！')
+      req.flash('errorMessage', '該填的沒填唷！')
+      return next()
     }
 
     userModel.get(username, (error, user) => {
       if(error) {       
-        return req.flash('errorMessage', error.toString())
+        req.flash('errorMessage', error.toString())
+        return next()
+        
       }
-
+      if(!user){
+        req.flash('errorMessage', '帳號不存在')
+        return next()
+        
+      }
       bcrypt.compare(password, user.password, function(error, result) {
-        if(error) {        
-          return req.flash('errorMessage', '密碼錯誤')
+        if(error || !result) {        
+          req.flash('errorMessage', '密碼錯誤')
+          return next()
         }
         req.session.username = user.username
         res.redirect('/')
       });
     })
-
-
-    if(req.body.password === 'abc') {
-      req.session.username = true
-      res.redirect('/')
-    } else {
-      req.flash('errorMessage', 'Please input the correct password.')
-      res.redirect('/login')
-    }
   },
   logout:(req, res)=>{
     req.session.username = false
