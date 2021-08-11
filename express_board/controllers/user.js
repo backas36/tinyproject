@@ -1,4 +1,7 @@
 const userModel = require('../models/user')
+const bcrypt = require('bcrypt')
+const saltRounds = 10;
+
 
 const userController = {
   get: (req, res) => {
@@ -9,7 +12,7 @@ const userController = {
   },
   handleLogin: (req,res) => {
     if(req.body.password === 'abc') {
-      req.session.isLogin = true
+      req.session.username = true
       res.redirect('/')
     } else {
       req.flash('errorMessage', 'Please input the correct password.')
@@ -17,7 +20,7 @@ const userController = {
     }
   },
   logout:(req, res)=>{
-    req.session.isLogin = false
+    req.session.username = false
     res.redirect('/')
   },
   register: (req, res) => {
@@ -25,6 +28,29 @@ const userController = {
 
   },
   handleRegister:(req, res) => {
+    const {username, password, nickname} = req.body
+    if(!username || !password || !nickname){
+      return req.flash('errorMessage', 'You should fill in all input field')
+    }
+
+
+    bcrypt.hash(password, saltRounds, function(error, hash) {
+      if(error){
+        return req.flash('errorMessage',error.toString() )
+      }
+
+      userModel.add({
+        username,
+        nickname,
+        password: hash
+      }, (error, result) => {
+        if(error) {
+          return req.flash('errorMessage',error.toString() )
+        }
+        req.session.username = username
+        res.redirect('/')
+      })
+    });
   },
   
 }

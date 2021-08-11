@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(flash())
 
 app.use((req, res, next) => {
-  res.locals.isLogin = req.session.isLogin
+  res.locals.username = req.session.username
   res.locals.errorMessage = req.flash('errorMessage')
   next()
 })
