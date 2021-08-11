@@ -46,16 +46,19 @@ const userController = {
     res.render('user/register')
 
   },
-  handleRegister:(req, res) => {
+  handleRegister:(req, res, next) => {
     const {username, password, nickname} = req.body
     if(!username || !password || !nickname){
-      return req.flash('errorMessage', 'You should fill in all input field')
+      req.flash('errorMessage', 'You should fill in all input field')
+      return next()
     }
 
 
     bcrypt.hash(password, saltRounds, function(error, hash) {
       if(error){
-        return req.flash('errorMessage',error.toString() )
+        req.flash('errorMessage',error.toString() )
+        return next()
+        
       }
 
       userModel.add({
@@ -64,7 +67,9 @@ const userController = {
         password: hash
       }, (error, result) => {
         if(error) {
-          return req.flash('errorMessage',error.toString() )
+          req.flash('errorMessage',error.toString() )
+          return next()
+          
         }
         req.session.username = username
         res.redirect('/')
