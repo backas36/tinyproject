@@ -19,6 +19,13 @@ const userController = {
   logout:(req, res)=>{
     req.session.isLogin = false
     res.redirect('/')
-  }
+  },
+  register: (req, res) => {
+    res.render('user/register')
+
+  },
+  handleRegister:(req, res) => {
+  },
+  
 }
 module.exports = userController

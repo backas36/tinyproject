@@ -38,6 +38,9 @@ app.get('/login', userController.login)
 app.post('/login', userController.handleLogin)
 app.get('/logout', userController.logout)
 
+app.get('/register', userController.register)
+app.post('/register', userController.handleRegister)
+
 
 
 app.listen(port, ()=> {
