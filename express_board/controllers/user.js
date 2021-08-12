@@ -1,12 +1,10 @@
-const userModel = require('../models/user')
 const bcrypt = require('bcrypt')
 const saltRounds = 10;
+const db = require('../models')
+const User = db.User
 
 
 const userController = {
-  get: (req, res) => {
-
-  },
   login:(req, res) => {
     res.render('user/login')
   },
@@ -17,25 +15,27 @@ const userController = {
       return next()
     }
 
-    userModel.get(username, (error, user) => {
-      if(error) {       
-        req.flash('errorMessage', error.toString())
-        return next()
-        
+    User.findOne({
+      where:{
+        username
       }
-      if(!user){
-        req.flash('errorMessage', '帳號不存在')
-        return next()
-        
-      }
-      bcrypt.compare(password, user.password, function(error, result) {
+    }).then(user => {
+       if(!user){
+          req.flash('errorMessage', '帳號不存在')
+          return next()
+        }
+         bcrypt.compare(password, user.password, function(error, result) {
         if(error || !result) {        
           req.flash('errorMessage', '密碼錯誤')
           return next()
         }
         req.session.username = user.username
+        req.session.userId = user.id
         res.redirect('/')
       });
+    }).catch(error => {
+      req.flash('errorMessage', error.toString())
+      return next()
     })
   },
   logout:(req, res)=>{
@@ -44,7 +44,6 @@ const userController = {
   },
   register: (req, res) => {
     res.render('user/register')
-
   },
   handleRegister:(req, res, next) => {
     const {username, password, nickname} = req.body
@@ -53,26 +52,23 @@ const userController = {
       return next()
     }
 
-
     bcrypt.hash(password, saltRounds, function(error, hash) {
       if(error){
         req.flash('errorMessage',error.toString() )
         return next()
-        
       }
 
-      userModel.add({
+      User.create({
         username,
         nickname,
         password: hash
-      }, (error, result) => {
-        if(error) {
-          req.flash('errorMessage',error.toString() )
-          return next()
-          
-        }
+      }).then((user) => {
         req.session.username = username
+        req.session.userId = user.id
         res.redirect('/')
+      }).catch((error) => {
+        req.flash('errorMessage',error.toString() )
+        return next()
       })
     });
   },

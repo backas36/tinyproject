@@ -28,12 +28,15 @@
           <div class="card mt-2">
             <div class="card-body">
               <h5 class="card-title">
-                <%= comment.nickname%>
+                <%= comment.User.nickname%>
               </h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                <%= comment.createdAt %>
+              </h6>
               <p class="card-text">
                 <%= comment.content%>
               </p>
-              <% if(username===comment.username) { %>
+              <% if(username===comment.User.username) { %>
                 <a class="card-link" href="/update_comments/<%= comment.id%>">編輯</a>
                 <a class="card-link" href="/delete_comments/<%= comment.id%>">刪除</a>
                 <%}%>
