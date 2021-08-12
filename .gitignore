@@ -7,3 +7,4 @@ board/
 week11_hw2/
 node_modules/
 package-lock.json
+config/
