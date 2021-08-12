@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/backas36/sideproject/issues"
   },
-  "homepage": "https://github.com/backas36/sideproject#readme"
+  "homepage": "https://github.com/backas36/sideproject#readme",
+  "dependencies": {
+    "mysql2": "^2.3.0",
+    "sequelize": "^6.6.5"
+  }
 }
