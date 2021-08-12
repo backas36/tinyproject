@@ -1,4 +1,4 @@
-const commentModel = require('../models/comment')
+const commentModel = require('../1/comment')
 
 
 
