@@ -12,31 +12,32 @@
 </html>
 
 <%- include ('template/navbar')%>
-
-
-
-
-
-  <h1>簡易會員系統</h1>
-  <% if(username) { %>
-    <form action="/comments" method="POST">
-      <textarea name="content" cols="30" rows="10"></textarea>
-      <input type="submit" />
-    </form>
-    <% } %>
-
-      <% comments.forEach(comment=> { %>
-        <div>
-          <h2>
-            <%= comment.nickname%>
-          </h2>
-          <p>
-            <%= comment.content%>
-          </p>
-          <% if(username===comment.username) { %>
-            <a href="/update_comments/<%= comment.id%>">編輯</a>
-            <a href="/delete_comments/<%= comment.id%>">刪除</a>
-            <%}%>
+  <div class="container">
+    <% if(username) { %>
+      <form action="/comments" method="POST">
+        <div class="mb-3">
+          <label for="content" class="form-label">留言內容</label>
+          <textarea class="form-control" id="content" rows="3" name="content"></textarea>
+          <button type="submit" class="btn btn-primary mt-2">新增留言</button>
         </div>
+      </form>
+      <% } %>
 
-        <% }) %>
+        <% comments.forEach(comment=> { %>
+
+          <div class="card mt-2">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= comment.nickname%>
+              </h5>
+              <p class="card-text">
+                <%= comment.content%>
+              </p>
+              <% if(username===comment.username) { %>
+                <a class="card-link" href="/update_comments/<%= comment.id%>">編輯</a>
+                <a class="card-link" href="/delete_comments/<%= comment.id%>">刪除</a>
+                <%}%>
+            </div>
+          </div>
+          <% }) %>
+  </div>

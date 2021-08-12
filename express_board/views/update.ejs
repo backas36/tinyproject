@@ -1,5 +1,29 @@
-<h1>編輯留言</h1>
-<form action="/update_comments/<%= comment.id %>" method="POST">
-  <textarea name="content" cols="30" rows="10"><%= comment.content %></textarea>
-  <input type="submit">
-</form>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include ('template/head')%>
+</head>
+
+<body>
+  <%- include ('template/navbar')%>
+
+    <div class="container " style="width: 30rem;">
+      <h1 class="text-center">編輯留言</h1>
+      <form action="/update_comments/<%= comment.id %>" method="POST">
+
+
+        <div class="mb-3 mt-4">
+          <label for="content" class="form-label">留言內容:</label>
+
+          <textarea class="form-control" name="content" cols="30" rows="10">
+            <%= comment.content %>
+          </textarea>
+          <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        </div>
+      </form>
+    </div>
+
+</body>
+
+</html>

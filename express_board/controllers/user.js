@@ -8,7 +8,7 @@ const userController = {
 
   },
   login:(req, res) => {
-    res.render('login')
+    res.render('user/login')
   },
   handleLogin: (req,res, next) => {
     const {username, password} = req.body
